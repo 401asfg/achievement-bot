@@ -94,8 +94,6 @@ def _tokenize(lexeme: str, state: State) -> Token:
         return Token(TokenType.WORD, lexeme)
     elif lexeme in TOKEN_TYPE_OF_KEYWORD_DICT:
         return Token(TOKEN_TYPE_OF_KEYWORD_DICT[lexeme], lexeme)
-    elif lexeme.isnumeric():
-        return Token(TokenType.NUMBER, lexeme)
 
     raise LexError("Unknown lexeme")
 

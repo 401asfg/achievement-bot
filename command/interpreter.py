@@ -1,20 +1,14 @@
-from command.expression import NumberExpr, StringExpr, DirectionExpr, HelpCmdExpr, CharacterCmdExpr, \
-    MoveCmdExpr, CommandExpr
-from command.keyword_lib import Direction, DIRECTION_DICT, Command, COMMAND_DICT, COMMAND_HELP, COMMAND_CHARACTER, \
-    COMMAND_MOVE
+from command.expression import StringExpr, CommandExpr, HelpCmdExpr, AchieveCmdExpr, ViewCmdExpr
 
 # TODO: test
+from command.keyword_lib import Command, COMMAND_DICT, COMMAND_HELP, COMMAND_ACHIEVE, COMMAND_VIEW
 
 _author: str
 
 
-def _interpret_number(number_expr: NumberExpr) -> int:
-    return int(number_expr.value)
-
-
-def _interpret_string(string_expr: StringExpr) -> str:
-    string_value: str = string_expr.value
-    next_string: StringExpr = string_expr.next_string
+def _interpret_string(expression: StringExpr) -> str:
+    string_value: str = expression.value
+    next_string: StringExpr = expression.next_string
 
     if next_string is None:
         return string_value
@@ -22,43 +16,40 @@ def _interpret_string(string_expr: StringExpr) -> str:
     return string_value + " " + _interpret(next_string)
 
 
-def _interpret_direction(direction_expr: DirectionExpr) -> Direction:
-    return DIRECTION_DICT[direction_expr.value]
+def _interpret_command(expression: CommandExpr) -> Command:
+    return COMMAND_DICT[expression.value]
 
 
-def _interpret_command(command_expr: CommandExpr) -> Command:
-    return COMMAND_DICT[command_expr.value]
-
-
-def _interpret_help_command(help_cmd_expr: HelpCmdExpr):
+def _interpret_help_command(expression: HelpCmdExpr):
     print(COMMAND_HELP)
 
-    if help_cmd_expr.command is not None:
-        print(_interpret(help_cmd_expr.command))
+    if expression.command is not None:
+        print(_interpret(expression.command))
 
 
-def _interpret_character_command(character_cmd_expr: CharacterCmdExpr):
-    global _author
+def _interpret_achieve_command(expression: AchieveCmdExpr):
+    print(COMMAND_ACHIEVE)
+    print(_interpret(expression.user))
+    print(_interpret(expression.achievement_name))
 
-    print(_author)
-    print(COMMAND_CHARACTER)
-    print(_interpret(character_cmd_expr.name))
+    if expression.achievement_description is not None:
+        print(_interpret(expression.achievement_description))
 
 
-def _interpret_move_command(move_cmd_expr: MoveCmdExpr):
-    print(COMMAND_MOVE)
-    print(_interpret(move_cmd_expr.direction))
-    print(_interpret(move_cmd_expr.distance))
+def _interpret_view_command(expression: ViewCmdExpr):
+    print(COMMAND_VIEW)
+    print(_interpret(expression.user))
+
+    if expression.achievement_name is not None:
+        print(_interpret(expression.achievement_name))
 
 
 EXPRESSION_INTERPRETER_DICT = {
-    NumberExpr: _interpret_number,
     StringExpr: _interpret_string,
-    DirectionExpr: _interpret_direction,
     CommandExpr: _interpret_command,
     HelpCmdExpr: _interpret_help_command,
-    CharacterCmdExpr: _interpret_character_command,
-    MoveCmdExpr: _interpret_move_command
+    AchieveCmdExpr: _interpret_achieve_command,
+    ViewCmdExpr: _interpret_view_command
 }
 
 

@@ -1,9 +1,8 @@
 from typing import List, Callable, Dict, Tuple
 
 from command.exceptions import ParsingError
-from command.expression import Expression, HelpCmdExpr, CharacterCmdExpr, StringExpr, NumberExpr, MoveCmdExpr, \
-    DirectionExpr, CommandExpr
-from command.keyword_lib import COMMAND_HELP, COMMAND_CHARACTER, COMMAND_MOVE
+from command.expression import Expression, HelpCmdExpr, StringExpr, CommandExpr, AchieveCmdExpr, ViewCmdExpr
+from command.keyword_lib import COMMAND_HELP, COMMAND_ACHIEVE, COMMAND_VIEW
 from command.token import Token, TokenType
 
 
@@ -75,7 +74,9 @@ def _token_type_parser(valid_token_types: Tuple[TokenType, ...], invalid_token_t
     def decorator(parse_fn: Callable[[List[Token]], any]):
         def wrapper(tokens: List[Token]):
             return _call_parser_after_validation(parse_fn, tokens, valid_token_types, invalid_token_type_msg)
+
         return wrapper
+
     return decorator
 
 
@@ -97,32 +98,6 @@ def _parse_word(tokens: List[Token]) -> StringExpr:
     return StringExpr(token.value, _parse_word(tokens))
 
 
-@_token_type_parser((TokenType.NUMBER,), "Command requires a number, did not receive one")
-def _parse_number(tokens: List[Token]) -> NumberExpr:
-    """
-    Parse a number token
-
-    :param tokens: The tokens to parse
-    :return: A number expression
-    :raise ParsingError: If token is not a number
-    """
-    token: Token = pop_first(tokens)
-    return NumberExpr(token.value)
-
-
-@_token_type_parser((TokenType.DIRECTION,), "Command requires a direction, did not receive one")
-def _parse_direction(tokens: List[Token]) -> DirectionExpr:
-    """
-    Parse a direction token
-
-    :param tokens: The tokens to parse
-    :return: A direction expression
-    :raise ParsingError: If token is not a direction
-    """
-    token: Token = pop_first(tokens)
-    return DirectionExpr(token.value)
-
-
 # TODO: Create command_parser helper decorator?
 
 
@@ -139,6 +114,15 @@ def _parse_command(tokens: List[Token]) -> CommandExpr:
     return CommandExpr(token.value)
 
 
+def _has_optional_param(tokens: List[Token], token_type: TokenType) -> bool:
+    """
+    :param tokens: The tokens to check for the optional parameter
+    :param token_type: The type that the token representing the optional parameter should be of
+    :return: True if tokens still contains the command's optional parameter; otherwise, False
+    """
+    return not is_empty(tokens) and is_of_type(tokens[0], token_type)
+
+
 def _parse_help_command(tokens: List[Token]) -> HelpCmdExpr:
     """
     Parse a help token
@@ -149,49 +133,70 @@ def _parse_help_command(tokens: List[Token]) -> HelpCmdExpr:
     """
 
     token: Token = pop_first(tokens)
+    value: str = token.value
 
-    if not is_empty(tokens) and not is_of_type(tokens[0], TokenType.COMMAND) or is_empty(tokens):
-        return HelpCmdExpr(token.value)
+    if _has_optional_param(tokens, TokenType.COMMAND):
+        command: CommandExpr = _parse_command(tokens)
+        return HelpCmdExpr(value, command)
 
-    return HelpCmdExpr(token.value, _parse_command(tokens))
+    return HelpCmdExpr(value)
 
 
-def _parse_character_command(tokens: List[Token]) -> CharacterCmdExpr:
+def _has_optional_string_param(tokens: List[Token]) -> bool:
     """
-    Parse a character token
+    :param tokens: The tokens to check for the optional string parameter
+    :return: True if tokens still contains the command's optional string parameter; otherwise, False
+    """
+
+    return _has_optional_param(tokens, TokenType.WORD) or _has_optional_param(tokens, TokenType.END_WORD)
+
+
+def _parse_achieve_command(tokens: List[Token]) -> AchieveCmdExpr:
+    """
+    Parse an achieve token
 
     :param tokens: The tokens to parse
-    :return: A character command expression
+    :return: An achieve command expression
+    :raise ParsingError: If there are parsing errors in the arguments
+    """
+
+    token: Token = pop_first(tokens)
+    value: str = token.value
+    user: StringExpr = _parse_word(tokens)
+    achievement_name: StringExpr = _parse_word(tokens)
+
+    if _has_optional_string_param(tokens):
+        description_name: StringExpr = _parse_word(tokens)
+        return AchieveCmdExpr(value, user, achievement_name, description_name)
+
+    return AchieveCmdExpr(value, user, achievement_name)
+
+
+def _parse_view_command(tokens: List[Token]) -> ViewCmdExpr:
+    """
+    Parse a view token
+
+    :param tokens: The tokens to parse
+    :return: A list command expression
     :raise ParsingError: If there are parsing errors in the arguments
     """
     token: Token = pop_first(tokens)
-    return CharacterCmdExpr(token.value, _parse_word(tokens))
+    value: str = token.value
+    user: StringExpr = _parse_word(tokens)
 
+    if _has_optional_string_param(tokens):
+        achievement_name: StringExpr = _parse_word(tokens)
+        return ViewCmdExpr(value, user, achievement_name)
 
-def _parse_move_command(tokens: List[Token]) -> MoveCmdExpr:
-    """
-    Parse a move token
-
-    :param tokens: The tokens to parse
-    :return: A move command expression
-    :raise ParsingError: If there are parsing errors in the arguments
-    """
-
-    token: Token = pop_first(tokens)
-    direction_expr = _parse_direction(tokens)
-
-    if not is_empty(tokens) and not is_of_type(tokens[0], TokenType.NUMBER) or is_empty(tokens):
-        return MoveCmdExpr(token.value, direction_expr)
-
-    return MoveCmdExpr(token.value, direction_expr, _parse_number(tokens))
+    return ViewCmdExpr(value, user)
 
 
 # TODO: localize to the keyword_lib module
 # TODO: switch on enum instead of switch on string consts?
 COMMAND_PARSER_DICT: Dict[str, Callable[[List[Token]], CommandExpr]] = {
     COMMAND_HELP: _parse_help_command,
-    COMMAND_CHARACTER: _parse_character_command,
-    COMMAND_MOVE: _parse_move_command
+    COMMAND_ACHIEVE: _parse_achieve_command,
+    COMMAND_VIEW: _parse_view_command
 }
 
 

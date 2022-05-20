@@ -1,12 +1,12 @@
 from command import exceptions
+from command import keyword_lib
 
 
 # TODO: make state/context in the lexer and interpreter module wide variables
 
 
 def is_command(message: str) -> bool:
-    from command.keyword_lib import COMMAND_INDICATOR
-    return message.startswith(COMMAND_INDICATOR)
+    return message.startswith(keyword_lib.COMMAND_INDICATOR)
 
 
 def interpret_command(message: str, author: str):

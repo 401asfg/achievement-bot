@@ -11,27 +11,11 @@ class Expression:
 
 
 @dataclass(frozen=True)
-class NumberExpr(Expression):
-    """
-    A number portion of a command
-    """
-    pass
-
-
-@dataclass(frozen=True)
 class StringExpr(Expression):
     """
     A string portion of a command
     """
     next_string: Optional['StringExpr']
-
-
-@dataclass(frozen=True)
-class DirectionExpr(Expression):
-    """
-    A direction portion of a command
-    """
-    pass
 
 
 @dataclass(frozen=True)
@@ -45,23 +29,25 @@ class CommandExpr(Expression):
 @dataclass(frozen=True)
 class HelpCmdExpr(CommandExpr):
     """
-    A help command keyword at the start of a command
+    A help command keyword
     """
     command: CommandExpr = None
 
 
 @dataclass(frozen=True)
-class CharacterCmdExpr(CommandExpr):
+class AchieveCmdExpr(CommandExpr):
     """
-    A character command keyword at the start of a command
+    An achieve command keyword
     """
-    name: StringExpr
+    user: StringExpr
+    achievement_name: StringExpr
+    achievement_description: StringExpr = None
 
 
 @dataclass(frozen=True)
-class MoveCmdExpr(CommandExpr):
+class ViewCmdExpr(CommandExpr):
     """
-    A move command keyword at the start of a command
+    A view command keyword
     """
-    direction: DirectionExpr
-    distance: NumberExpr = NumberExpr("1")
+    user: StringExpr
+    achievement_name: StringExpr = None
