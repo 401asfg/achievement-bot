@@ -21,7 +21,7 @@ async def on_message(message):
         return
 
     try:
-        interpret_command(content, message.author.name)
+        interpret_command(content, message.author.achievement_name)
     except exceptions.LexError:
         pass                # TODO: send error message to user
     except exceptions.ParsingError:

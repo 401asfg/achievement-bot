@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from command.keyword_lib import COMMANDS, DIRECTIONS
+from command.keyword_lib import COMMANDS
 from utils.dict_merging import merge_fromkeys_dicts
 
 
@@ -10,14 +10,12 @@ class TokenType(Enum):
     The type of a token
     """
     COMMAND = 0
-    DIRECTION = 1
-    NUMBER = 2
-    WORD = 3
-    END_WORD = 4
+    WORD = 1
+    END_WORD = 2
 
 
-TOKEN_TYPE_OF_KEYWORD_DICT = merge_fromkeys_dicts([COMMANDS, DIRECTIONS],
-                                                  [TokenType.COMMAND, TokenType.DIRECTION])
+TOKEN_TYPE_OF_KEYWORD_DICT = merge_fromkeys_dicts([COMMANDS],
+                                                  [TokenType.COMMAND])
 
 
 @dataclass(frozen=True)
