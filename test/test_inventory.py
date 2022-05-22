@@ -7,7 +7,7 @@ from model.inventory.inventory_item import InventoryItem
 
 
 class TestInventory(unittest.TestCase):
-    inventory: Inventory
+    inventory: Inventory[InventoryItem]
 
     name_a = "Item A"
     name_b = "Item B"
