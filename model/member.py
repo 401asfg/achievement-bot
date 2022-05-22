@@ -5,13 +5,15 @@ from model.inventory.inventory import Inventory
 
 from model.inventory.inventory_item import InventoryItem
 
-# TODO: test
-
 
 class Member(InventoryItem, Inventory[Achievement]):
     """
     A member of the guild that can hold achievements
     """
+
+    def __init__(self, name: str):
+        super().__init__(name)
+        self._items = {}            # TODO: discover a way to inherit this from Inventory
 
     def get_achievement_names(self) -> List[str]:
         """

@@ -6,8 +6,6 @@ from model.inventory.inventory_item import InventoryItem
 
 T = TypeVar("T", bound=InventoryItem)
 
-# TODO: test
-
 
 class Inventory(Generic[T]):
     """
