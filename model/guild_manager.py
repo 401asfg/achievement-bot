@@ -1,7 +1,5 @@
 from typing import List
 
-import discord
-
 from bot_output_lib import member_not_in_server_error_msg, member_achievements_header_msg
 from model.achievement import Achievement
 from model.guild import Guild
@@ -25,28 +23,28 @@ class GuildManager:
         """
         self._guild = guild
 
-    def query_guild(self, member: discord.Member, members: List[discord.Member]) -> Member:
+    def query_guild(self, member: str, members: List[str]) -> Member:
         """
-        Get the guild member with the same id as the given member if it is in the given members list; also add the
+        Get the guild member with the same name as the given member if it is in the given members list; also add the
         given member to the guild if it is not already in the guild but is in the given members list
 
-        :param member: The member with the same id as the member to get
+        :param member: The member with the same name as the member to get
         :param members: The list of members that the given member must be in to be retrieved
-        :return: The member with the same id as the given member
+        :return: The member with the same name as the given member
         :raise ValueError: If the given member is not in the given members list
         """
 
         if member not in members:
-            raise ValueError(member_not_in_server_error_msg(member.nick))
+            raise ValueError(member_not_in_server_error_msg(member))
 
-        if self._guild.contains(member.id):
-            return self._guild.get(member.id)
+        if self._guild.contains(member):
+            return self._guild.get(member)
 
-        guild_member = Member(member.id)
+        guild_member = Member(member)
         self._guild.add(guild_member)
         return guild_member
 
-    def add_achievement(self, member: discord.Member, members: List[discord.Member], achievement_name: str):
+    def add_achievement(self, member: str, members: List[str], achievement_name: str):
         """
         Add a new achievement with the given achievement_name to the given member if it is in the given members list
 
@@ -61,7 +59,7 @@ class GuildManager:
         achievement = Achievement(achievement_name)
         guild_member.add(achievement)
 
-    def build_achievement_list_msg(self, member: discord.Member, members: List[discord.Member]) -> str:
+    def build_achievement_list_msg(self, member: str, members: List[str]) -> str:
         """
         Builds a message that lists all the achievement that the given member has attained, if the given member is in
         the given members list
@@ -74,7 +72,7 @@ class GuildManager:
 
         guild_member = self.query_guild(member, members)
         achievement_names = guild_member.get_achievement_names()
-        achievement_list_msg = member_achievements_header_msg(member.nick)
+        achievement_list_msg = member_achievements_header_msg(member)
 
         for achievement_name in achievement_names:
             achievement_list_msg += "\n" + achievement_name

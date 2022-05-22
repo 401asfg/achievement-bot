@@ -1,4 +1,5 @@
 import unittest
+from typing import List
 
 from model.achievement import Achievement
 from model.guild import Guild
@@ -33,6 +34,13 @@ class TestGuildManager(unittest.TestCase):
     achievement_f: Achievement
 
     def setUp(self) -> None:
+        self.guild = Guild()
+        self.guild_manager = GuildManager(self.guild)
+
+        self.member_a = Member(self.member_name_a)
+        self.member_b = Member(self.member_name_b)
+        self.member_c = Member(self.member_name_c)
+
         self.achievement_a = Achievement(self.achievement_name_a)
         self.achievement_b = Achievement(self.achievement_name_b)
         self.achievement_c = Achievement(self.achievement_name_c)
@@ -40,22 +48,28 @@ class TestGuildManager(unittest.TestCase):
         self.achievement_e = Achievement(self.achievement_name_e)
         self.achievement_f = Achievement(self.achievement_name_f)
 
-        self.member_a = Member(self.member_name_a)
-        self.member_a.add(self.achievement_a)
-        self.member_a.add(self.achievement_b)
+    def test_query_guild(self):
+        def assert_fail(member: str, members: List[str]):
+            try:
+                self.guild_manager.query_guild(member, members)
+                self.fail()
+            except ValueError:
+                pass
 
-        self.member_b = Member(self.member_name_b)
-        self.member_b.add(self.achievement_c)
-        self.member_b.add(self.achievement_d)
+        def assert_pass(expected_member: Member, member: str, members: List[str]):
+            actual_member = self.guild_manager.query_guild(member, members)
+            self.assertEqual(expected_member, actual_member)
 
-        self.member_c = Member(self.member_name_c)
-        self.member_c.add(self.achievement_e)
-        self.member_c.add(self.achievement_f)
+        assert_fail(self.member_name_a, [])
+        assert_fail(self.member_name_b, [])
+        assert_fail(self.member_name_c, [])
+        assert_fail(self.member_name_a, [self.member_name_b, self.member_c])
+        assert_fail(self.member_name_b, [self.member_name_a, self.member_c])
+        assert_fail(self.member_name_c, [self.member_name_a, self.member_b])
 
-        self.guild = Guild()
-        self.guild.add(self.member_a)
-        self.guild.add(self.member_b)
-        self.guild.add(self.member_c)
+        # TODO: write rest of this test
+
+    # TODO: write other tests
 
 
 if __name__ == '__main__':
