@@ -1,7 +1,6 @@
 import unittest
-from typing import Optional
 
-from model.inventory_item import InventoryItem
+from model.inventory.inventory_item import InventoryItem
 
 
 class TestInventoryItem(unittest.TestCase):

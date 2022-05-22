@@ -1,8 +1,8 @@
 from typing import Dict, TypeVar, Generic
 
-from model.inventory_exceptions.inventory_contains_item_error import InventoryContainsItemError
-from model.inventory_exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
-from model.inventory_item import InventoryItem
+from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
+from model.inventory.inventory_item import InventoryItem
 
 T = TypeVar("T", bound=InventoryItem)
 
@@ -15,7 +15,6 @@ class Inventory(Generic[T]):
     """
 
     _items: Dict[str, T]
-    _index: int
 
     def __init__(self):
         """
@@ -60,26 +59,3 @@ class Inventory(Generic[T]):
             raise InventoryContainsItemError(f"The inventory already has the {item.name} item")
 
         self._items[item.name] = item
-
-    def __iter__(self):
-        """
-        Set the iteration index to 0
-
-        :return: This inventory
-        """
-        self._index = 0
-        return self
-
-    def __next__(self):
-        """
-        :return: The next item
-        :raise StopIteration: If there is no next item
-        """
-
-        if self._index >= self.size():
-            raise StopIteration
-
-        values = list(self._items.values())
-        result = values[self._index]
-        self._index += 1
-        return result

@@ -1,4 +1,4 @@
-from model.inventory_item import InventoryItem
+from model.inventory.inventory_item import InventoryItem
 
 
 class Achievement(InventoryItem):
