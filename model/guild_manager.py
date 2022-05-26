@@ -1,6 +1,7 @@
 from typing import List
 
-from bot_output_lib import member_not_in_server_error_msg, member_achievements_header_msg
+from bot_output_lib import member_not_in_server_error_msg, member_achievements_header_msg, \
+    ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG
 from model.achievement import Achievement
 from model.guild import Guild
 from model.member import Member
@@ -23,6 +24,19 @@ class GuildManager:
         """
         self._guild = guild
 
+    def guild_size(self) -> int:
+        """
+        :return: The number of members in the guild
+        """
+        return self._guild.size()
+
+    def guild_contains(self, member: str) -> bool:
+        """
+        :param member: The member to check the guild for
+        :return: True if the given member is in the guild; otherwise, False
+        """
+        return self._guild.contains(member)
+
     def query_guild(self, member: str, members: List[str]) -> Member:
         """
         Get the guild member with the same name as the given member if it is in the given members list; also add the
@@ -44,17 +58,23 @@ class GuildManager:
         self._guild.add(guild_member)
         return guild_member
 
-    def add_achievement(self, member: str, members: List[str], achievement_name: str):
+    def add_achievement(self, member: str, members: List[str], achievement_name: str, adder: str):
         """
         Add a new achievement with the given achievement_name to the given member if it is in the given members list
 
         :param member: The member to add the achievement to
         :param members: The members list that the given member has to be in
         :param achievement_name: The name that the achievement to add to the member has
-        :raise ValueError: If the given member is not in the given members list
+        :param adder: The member that instructed the achievement to be added to the given member
+        :raise ValueError: If the given member is the given, or if the given member is not in the given members list
+        adder
         :raise InventoryContainsItemError: If the given member already contains an achievement that has the given
         achievement_name
         """
+
+        if member == adder:
+            raise ValueError(ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG)
+
         guild_member = self.query_guild(member, members)
         achievement = Achievement(achievement_name)
         guild_member.add(achievement)

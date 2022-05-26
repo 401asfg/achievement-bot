@@ -10,6 +10,8 @@ LIST_DESCRIPTION = "Lists all of the achievements that a user has"
 LIST_EXAMPLE = COMMAND_PREFIX + LIST_NAME + " @TheMightyMeercat"
 LIST_HELP = LIST_DESCRIPTION + "\n" + LIST_EXAMPLE
 
+ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG = "You cannot add an achievement to yourself"
+
 
 def member_not_in_server_error_msg(member_name: str) -> str:
     """
