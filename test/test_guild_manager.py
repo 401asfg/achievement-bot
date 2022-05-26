@@ -15,10 +15,6 @@ class TestGuildManager(unittest.TestCase):
     member_name_b = "Member B"
     member_name_c = "Member C"
 
-    member_a: Member
-    member_b: Member
-    member_c: Member
-
     achievement_name_a = "Achievement A"
     achievement_name_b = "Achievement B"
     achievement_name_c = "Achievement C"
@@ -37,10 +33,6 @@ class TestGuildManager(unittest.TestCase):
         self.guild = Guild()
         self.guild_manager = GuildManager(self.guild)
 
-        self.member_a = Member(self.member_name_a)
-        self.member_b = Member(self.member_name_b)
-        self.member_c = Member(self.member_name_c)
-
         self.achievement_a = Achievement(self.achievement_name_a)
         self.achievement_b = Achievement(self.achievement_name_b)
         self.achievement_c = Achievement(self.achievement_name_c)
@@ -48,28 +40,187 @@ class TestGuildManager(unittest.TestCase):
         self.achievement_e = Achievement(self.achievement_name_e)
         self.achievement_f = Achievement(self.achievement_name_f)
 
+    def test_init(self):
+        self.assertEqual(0, self.guild_manager.guild_size())
+        self.assertFalse(self.guild_manager.guild_contains(self.member_name_a))
+        self.assertFalse(self.guild_manager.guild_contains(self.member_name_b))
+        self.assertFalse(self.guild_manager.guild_contains(self.member_name_c))
+
     def test_query_guild(self):
-        def assert_fail(member: str, members: List[str]):
+        def assert_state(expected_size: int,
+                         expected_contains_a: bool,
+                         expected_contains_b: bool,
+                         expected_contains_c: bool):
+            self.assertEqual(expected_size, self.guild_manager.guild_size())
+            self.assertEqual(expected_contains_a, self.guild_manager.guild_contains(self.member_name_a))
+            self.assertEqual(expected_contains_b, self.guild_manager.guild_contains(self.member_name_b))
+            self.assertEqual(expected_contains_c, self.guild_manager.guild_contains(self.member_name_c))
+
+        def assert_fail(member: str,
+                        members: List[str],
+                        expected_size: int,
+                        expected_contains_a: bool,
+                        expected_contains_b: bool,
+                        expected_contains_c: bool):
             try:
                 self.guild_manager.query_guild(member, members)
                 self.fail()
             except ValueError:
                 pass
 
-        def assert_pass(expected_member: Member, member: str, members: List[str]):
+            assert_state(expected_size, expected_contains_a, expected_contains_b, expected_contains_c)
+
+        def assert_member_not_in_members_fail(expected_size: int,
+                                              expected_contains_a: bool,
+                                              expected_contains_b: bool,
+                                              expected_contains_c: bool):
+            assert_fail(self.member_name_a,
+                        [],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_b,
+                        [],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_c,
+                        [],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_a,
+                        [self.member_name_c],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_b,
+                        [self.member_name_a],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_c,
+                        [self.member_name_b],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_a,
+                        [self.member_name_b, self.member_name_c],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_b,
+                        [self.member_name_a, self.member_name_c],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+            assert_fail(self.member_name_c,
+                        [self.member_name_a, self.member_name_b],
+                        expected_size,
+                        expected_contains_a,
+                        expected_contains_b,
+                        expected_contains_c)
+
+        def assert_pass_and_member_not_in_members_fail(expected_member_size: int,
+                                                       expected_size: int,
+                                                       expected_contains_a: bool,
+                                                       expected_contains_b: bool,
+                                                       expected_contains_c: bool,
+                                                       member: str,
+                                                       members: List[str]) -> Member:
             actual_member = self.guild_manager.query_guild(member, members)
-            self.assertEqual(expected_member, actual_member)
+            self.assertEqual(member, actual_member.name)
+            self.assertEqual(expected_member_size, actual_member.size())
+            assert_state(expected_size, expected_contains_a, expected_contains_b, expected_contains_c)
+            assert_member_not_in_members_fail(expected_size,
+                                              expected_contains_a,
+                                              expected_contains_b,
+                                              expected_contains_c)
+            return actual_member
 
-        assert_fail(self.member_name_a, [])
-        assert_fail(self.member_name_b, [])
-        assert_fail(self.member_name_c, [])
-        assert_fail(self.member_name_a, [self.member_name_b, self.member_c])
-        assert_fail(self.member_name_b, [self.member_name_a, self.member_c])
-        assert_fail(self.member_name_c, [self.member_name_a, self.member_b])
+        assert_member_not_in_members_fail(0, False, False, False)
+        assert_pass_and_member_not_in_members_fail(0,
+                                                   1,
+                                                   True,
+                                                   False,
+                                                   False,
+                                                   self.member_name_a,
+                                                   [self.member_name_a])
 
-        # TODO: write rest of this test
+        assert_pass_and_member_not_in_members_fail(0,
+                                                   1,
+                                                   True,
+                                                   False,
+                                                   False,
+                                                   self.member_name_a,
+                                                   [self.member_name_a, self.member_name_b, self.member_name_c])
 
-    # TODO: write other tests
+        member_b = assert_pass_and_member_not_in_members_fail(0,
+                                                              2,
+                                                              True,
+                                                              True,
+                                                              False,
+                                                              self.member_name_b,
+                                                              [self.member_name_a, self.member_name_b,
+                                                               self.member_name_c])
+
+        member_b.add(self.achievement_a)
+        member_b.add(self.achievement_b)
+        member_b.add(self.achievement_c)
+        member_b.add(self.achievement_d)
+
+        assert_pass_and_member_not_in_members_fail(4,
+                                                   2,
+                                                   True,
+                                                   True,
+                                                   False,
+                                                   self.member_name_b,
+                                                   [self.member_name_b])
+
+        assert_pass_and_member_not_in_members_fail(0,
+                                                   2,
+                                                   True,
+                                                   True,
+                                                   False,
+                                                   self.member_name_a,
+                                                   [self.member_name_a, self.member_name_c])
+
+        member_c = assert_pass_and_member_not_in_members_fail(0,
+                                                              3,
+                                                              True,
+                                                              True,
+                                                              True,
+                                                              self.member_name_c,
+                                                              [self.member_name_b, self.member_name_c])
+
+        member_c.add(self.achievement_e)
+        member_c.add(self.achievement_f)
+
+        assert_pass_and_member_not_in_members_fail(2,
+                                                   3,
+                                                   True,
+                                                   True,
+                                                   True,
+                                                   self.member_name_c,
+                                                   [self.member_name_c])
+
+        assert_pass_and_member_not_in_members_fail(4,
+                                                   3,
+                                                   True,
+                                                   True,
+                                                   True,
+                                                   self.member_name_b,
+                                                   [self.member_name_c, self.member_name_b])
+
+    # TODO: write rest of tests
 
 
 if __name__ == '__main__':
