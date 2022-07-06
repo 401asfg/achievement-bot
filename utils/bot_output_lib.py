@@ -10,6 +10,7 @@ LIST_DESCRIPTION = "Lists all of the achievements that a user has"
 LIST_EXAMPLE = COMMAND_PREFIX + LIST_NAME + " @TheMightyMeercat"
 LIST_HELP = LIST_DESCRIPTION + "\n" + LIST_EXAMPLE
 
+ACHIEVEMENT_BESTOWER_INDENT = "    "
 ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG = "You cannot add an achievement to yourself"
 
 
