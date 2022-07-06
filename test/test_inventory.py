@@ -9,10 +9,10 @@ from model.inventory.inventory_item import InventoryItem
 class TestInventory(unittest.TestCase):
     inventory: Inventory[InventoryItem]
 
-    name_a = "Item A"
-    name_b = "Item B"
-    name_c = "Item C"
-    name_d = "Item D"
+    NAME_A = "Item A"
+    NAME_B = "Item B"
+    NAME_C = "Item C"
+    NAME_D = "Item D"
 
     item_a: InventoryItem
     item_b: InventoryItem
@@ -22,25 +22,25 @@ class TestInventory(unittest.TestCase):
     def setUp(self) -> None:
         self.inventory = Inventory()
 
-        self.item_a = InventoryItem(self.name_a)
-        self.item_b = InventoryItem(self.name_b)
-        self.item_c = InventoryItem(self.name_c)
-        self.item_d = InventoryItem(self.name_d)
+        self.item_a = InventoryItem(self.NAME_A)
+        self.item_b = InventoryItem(self.NAME_B)
+        self.item_c = InventoryItem(self.NAME_C)
+        self.item_d = InventoryItem(self.NAME_D)
 
     def test_init(self):
         self.assertEqual(0, self.inventory.size())
-        self.assertFalse(self.inventory.contains(self.name_a))
-        self.assertFalse(self.inventory.contains(self.name_b))
-        self.assertFalse(self.inventory.contains(self.name_c))
-        self.assertFalse(self.inventory.contains(self.name_d))
+        self.assertFalse(self.inventory.contains(self.NAME_A))
+        self.assertFalse(self.inventory.contains(self.NAME_B))
+        self.assertFalse(self.inventory.contains(self.NAME_C))
+        self.assertFalse(self.inventory.contains(self.NAME_D))
 
     def test_add(self):
         def assert_state(size: int, contains_a: bool, contains_b: bool, contains_c: bool, contains_d: bool):
             self.assertEqual(size, self.inventory.size())
-            self.assertEqual(contains_a, self.inventory.contains(self.name_a))
-            self.assertEqual(contains_b, self.inventory.contains(self.name_b))
-            self.assertEqual(contains_c, self.inventory.contains(self.name_c))
-            self.assertEqual(contains_d, self.inventory.contains(self.name_d))
+            self.assertEqual(contains_a, self.inventory.contains(self.NAME_A))
+            self.assertEqual(contains_b, self.inventory.contains(self.NAME_B))
+            self.assertEqual(contains_c, self.inventory.contains(self.NAME_C))
+            self.assertEqual(contains_d, self.inventory.contains(self.NAME_D))
 
         def assert_pass(item: InventoryItem,
                         size: int,
@@ -107,34 +107,34 @@ class TestInventory(unittest.TestCase):
             except InventoryItemNotFoundError:
                 pass
 
-        assert_fail(self.name_a)
-        assert_fail(self.name_b)
-        assert_fail(self.name_c)
-        assert_fail(self.name_d)
+        assert_fail(self.NAME_A)
+        assert_fail(self.NAME_B)
+        assert_fail(self.NAME_C)
+        assert_fail(self.NAME_D)
 
         self.inventory.add(self.item_b)
-        assert_fail(self.name_a)
-        assert_pass(self.name_b, self.item_b)
-        assert_fail(self.name_c)
-        assert_fail(self.name_d)
+        assert_fail(self.NAME_A)
+        assert_pass(self.NAME_B, self.item_b)
+        assert_fail(self.NAME_C)
+        assert_fail(self.NAME_D)
 
         self.inventory.add(self.item_d)
-        assert_fail(self.name_a)
-        assert_pass(self.name_b, self.item_b)
-        assert_fail(self.name_c)
-        assert_pass(self.name_d, self.item_d)
+        assert_fail(self.NAME_A)
+        assert_pass(self.NAME_B, self.item_b)
+        assert_fail(self.NAME_C)
+        assert_pass(self.NAME_D, self.item_d)
 
         self.inventory.add(self.item_a)
-        assert_pass(self.name_a, self.item_a)
-        assert_pass(self.name_b, self.item_b)
-        assert_fail(self.name_c)
-        assert_pass(self.name_d, self.item_d)
+        assert_pass(self.NAME_A, self.item_a)
+        assert_pass(self.NAME_B, self.item_b)
+        assert_fail(self.NAME_C)
+        assert_pass(self.NAME_D, self.item_d)
 
         self.inventory.add(self.item_c)
-        assert_pass(self.name_a, self.item_a)
-        assert_pass(self.name_b, self.item_b)
-        assert_pass(self.name_c, self.item_c)
-        assert_pass(self.name_d, self.item_d)
+        assert_pass(self.NAME_A, self.item_a)
+        assert_pass(self.NAME_B, self.item_b)
+        assert_pass(self.NAME_C, self.item_c)
+        assert_pass(self.NAME_D, self.item_d)
 
 
 if __name__ == '__main__':

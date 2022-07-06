@@ -5,19 +5,23 @@ from model.achievement import Achievement
 
 
 class TestAchievement(unittest.TestCase):
-    name_a = "Name A"
-    name_b = "Name B"
-    name_c = "Name C"
+    NAME_A = "Name A"
+    NAME_B = "Name B"
+    NAME_C = "Name C"
+
+    BESTOWER_A = "Bestower A"
+    BESTOWER_B = "Bestower B"
+    BESTOWER_C = "Bestower C"
 
     def test_init(self):
-        def assert_init(name: str):
+        def assert_init(name: str, bestower: str):
             achievement: Achievement
-            achievement = Achievement(name)
+            achievement = Achievement(name, bestower)
             self.assertEqual(name, achievement.name)
 
-        assert_init(self.name_a)
-        assert_init(self.name_b)
-        assert_init(self.name_c)
+        assert_init(self.NAME_A, self.BESTOWER_A)
+        assert_init(self.NAME_B, self.BESTOWER_B)
+        assert_init(self.NAME_C, self.BESTOWER_C)
 
 
 if __name__ == '__main__':

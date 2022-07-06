@@ -6,17 +6,17 @@ from model.inventory.inventory import Inventory
 from model.inventory.inventory_item import InventoryItem
 
 
-class Member(InventoryItem, Inventory[Achievement]):
+class Person(InventoryItem, Inventory[Achievement]):
     """
-    A member of the guild that can hold achievements
+    A member of the community that can hold achievements
     """
 
     def __init__(self, name: str):
         super().__init__(name)
         self._items = {}            # TODO: discover a way to inherit this from Inventory
 
-    def get_achievement_names(self) -> List[str]:
+    def get_achievements(self) -> List[Achievement]:
         """
-        :return: The names of all the achievements that the member has
+        :return: All of the achievements that the person has
         """
-        return list(self._items.keys())
+        return list(self._items.values())
