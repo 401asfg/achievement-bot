@@ -1,5 +1,4 @@
 import unittest
-from typing import Optional
 
 from model.achievement import Achievement
 

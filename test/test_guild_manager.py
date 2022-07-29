@@ -493,7 +493,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-    # TODO: write rest of tests
+    # TODO: write tests for get achievements method
 
 
 if __name__ == '__main__':
