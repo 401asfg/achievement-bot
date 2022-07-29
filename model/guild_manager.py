@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from typing import List
 
-from utils.bot_output_lib import member_not_in_server_error_msg, member_achievements_header_msg, \
-    ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG, ACHIEVEMENT_BESTOWER_INDENT
 from model.achievement import Achievement
 from model.inventory.inventory import Inventory
 from model.person import Person
+from utils.bot_output_lib import member_not_in_server_error_msg, ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG
+
 
 # TODO: test
 
@@ -96,23 +96,15 @@ class GuildManager:
         achievement = Achievement(achievement_name, bestower)
         person.add(achievement)
 
-    def build_achievement_list_msg(self, member: GuildMember, valid_members: List[GuildMember]) -> str:
+    def get_achievements(self, member: GuildMember, valid_members: List[GuildMember]) -> List[Achievement]:
         """
-        Builds a message that lists all the achievement that the given member has attained, if the given member is in
-        the given valid_members list
+        Gets the list of all the achievements that the given member has attained, if the given member is in the given
+        valid_members list
 
         :param member: The member to list the achievements of
         :param valid_members: The list of members that the given member has to be in
-        :return: The message that lists all the achievements that the given member has attained
+        :return: The list of all the achievements that the given member has attained
         :raise ValueError: If the given member is not in the given valid_members list
         """
-
         person = self.query_guild(member, valid_members)
-        achievements = person.get_achievements()
-        achievement_list_msg = member_achievements_header_msg(member.display_name)
-
-        for achievement in achievements:
-            achievement_list_msg += \
-                "\n" + achievement.name + "\n" + ACHIEVEMENT_BESTOWER_INDENT + achievement.bestower
-
-        return achievement_list_msg
+        return person.get_achievements()
