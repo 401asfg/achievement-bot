@@ -1,20 +1,20 @@
 import os
-from typing import List
 
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from model.achievement import Achievement
-from utils.bot_output_lib import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, \
-    ACHIEVE_DESCRIPTION, member_already_has_achievement_error_msg, LIST_NAME, \
-    LIST_HELP, LIST_DESCRIPTION, member_achievements_header_msg, ACHIEVEMENT_BESTOWER_INDENT
-from model.guild_manager import GuildManager, GuildMember
+from model.guild_manager import GuildManager
 from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from model.inventory.inventory import Inventory
 from model.person import Person
+from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
+from utils.content import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, \
+    ACHIEVE_DESCRIPTION, member_already_has_achievement_error_msg, LIST_NAME, \
+    LIST_HELP, LIST_DESCRIPTION
 
 load_dotenv()
+
 intents = discord.Intents.default()
 intents.members = True
 
@@ -27,22 +27,6 @@ guild_manager = GuildManager(Inventory[Person]())      # TODO: pass a guild crea
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-
-
-def create_guild_member(member: discord.Member) -> GuildMember:
-    """
-    :param member: The discord member to create a guild member of
-    :return: A guild member created from the given discord member
-    """
-    return GuildMember(member.id, member.display_name)
-
-
-def create_guild_members(members: List[discord.Member]) -> List[GuildMember]:
-    """
-    :param members: The discord members to create guild members from
-    :return: A list of guild members that correspond to the given list of discord members
-    """
-    return [create_guild_member(member) for member in members]
 
 
 @bot.command(name=ACHIEVE_NAME, help=ACHIEVE_HELP, brief=ACHIEVE_DESCRIPTION)
@@ -61,15 +45,6 @@ async def achieve_command(ctx, member: discord.Member, *achievement_name_segment
         await ctx.send(e)
     except InventoryContainsItemError:
         await ctx.send(member_already_has_achievement_error_msg(guild_member.display_name, achievement_name))
-
-
-def create_achievement_list_msg(achievements: List[Achievement], guild_member: GuildMember) -> str:
-    achievement_list_msg = member_achievements_header_msg(guild_member.display_name)
-
-    for achievement in achievements:
-        achievement_list_msg += "\n" + achievement.name + "\n" + ACHIEVEMENT_BESTOWER_INDENT + achievement.bestower
-
-    return achievement_list_msg
 
 
 @bot.command(name=LIST_NAME, help=LIST_HELP, brief=LIST_DESCRIPTION)

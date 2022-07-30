@@ -4,7 +4,7 @@ from typing import List
 from model.achievement import Achievement
 from model.inventory.inventory import Inventory
 from model.person import Person
-from utils.bot_output_lib import member_not_in_server_error_msg, ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG
+from utils.content import member_not_in_server_error_msg, ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG
 
 
 # TODO: test
