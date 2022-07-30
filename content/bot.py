@@ -13,6 +13,15 @@ LIST_HELP = LIST_DESCRIPTION + "\n" + LIST_EXAMPLE
 ACHIEVEMENT_BESTOWER_INDENT = "    "
 
 
+def member_received_achievement_msg(member_name: str, achievement_name: str) -> str:
+    """
+    :param member_name: The name of the member who had the given achievement added to them
+    :param achievement_name: The name of the achievement that was added to the given member
+    :return: A message that states that the given member had the given achievement added to them
+    """
+    return f"{member_name} has attained the {achievement_name} achievement!"
+
+
 def member_achievements_header_msg(member_name: str) -> str:
     """
     :param member_name: The name of the member
