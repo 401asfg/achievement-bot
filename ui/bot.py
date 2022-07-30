@@ -9,9 +9,10 @@ from model.inventory.exceptions.inventory_contains_item_error import InventoryCo
 from model.inventory.inventory import Inventory
 from model.person import Person
 from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
-from utils.content import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, \
-    ACHIEVE_DESCRIPTION, member_already_has_achievement_error_msg, LIST_NAME, \
+from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, \
+    ACHIEVE_DESCRIPTION, LIST_NAME, \
     LIST_HELP, LIST_DESCRIPTION
+from content.error_messages import member_already_has_achievement_error_msg
 
 load_dotenv()
 
