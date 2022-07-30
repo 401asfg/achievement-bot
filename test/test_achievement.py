@@ -1,6 +1,6 @@
 import unittest
 
-from model.achievement import Achievement
+from src.model.achievement import Achievement
 
 
 class TestAchievement(unittest.TestCase):

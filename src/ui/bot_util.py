@@ -2,9 +2,9 @@ from typing import List
 
 import discord
 
-from model.achievement import Achievement
-from model.guild_manager import GuildMember
-from content.bot import member_achievements_header_msg, ACHIEVEMENT_BESTOWER_INDENT
+from src.model.achievement import Achievement
+from src.model.guild_manager import GuildMember
+from src.content.bot import member_achievements_header_msg, ACHIEVEMENT_BESTOWER_INDENT
 
 
 def create_guild_member(member: discord.Member) -> GuildMember:

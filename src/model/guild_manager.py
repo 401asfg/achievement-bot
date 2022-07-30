@@ -1,13 +1,10 @@
 from dataclasses import dataclass
 from typing import List
 
-from content.error_messages import ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG, member_not_in_server_error_msg
-from model.achievement import Achievement
-from model.guild import Guild
-from model.person import Person
-
-
-# TODO: test
+from src.content.error_messages import ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG, member_not_in_server_error_msg
+from src.model.achievement import Achievement
+from src.model.guild import Guild
+from src.model.person import Person
 
 
 @dataclass(frozen=True)
