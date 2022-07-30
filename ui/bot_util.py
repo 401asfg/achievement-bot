@@ -4,7 +4,7 @@ import discord
 
 from model.achievement import Achievement
 from model.guild_manager import GuildMember
-from utils.content import member_achievements_header_msg, ACHIEVEMENT_BESTOWER_INDENT
+from content.bot import member_achievements_header_msg, ACHIEVEMENT_BESTOWER_INDENT
 
 
 def create_guild_member(member: discord.Member) -> GuildMember:
