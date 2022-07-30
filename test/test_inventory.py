@@ -1,9 +1,9 @@
 import unittest
 
-from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
-from model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
-from model.inventory.inventory import Inventory
-from model.inventory.inventory_item import InventoryItem
+from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from src.model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
+from src.model.inventory.inventory import Inventory
+from src.model.inventory.inventory_item import InventoryItem
 
 
 class TestInventory(unittest.TestCase):

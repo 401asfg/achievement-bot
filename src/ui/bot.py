@@ -4,14 +4,14 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
+from src.content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
     LIST_DESCRIPTION, member_received_achievement_msg
-from content.error_messages import member_already_has_achievement_error_msg
-from model.achievement import Achievement
-from model.guild import Guild
-from model.guild_manager import GuildManager
-from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
-from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
+from src.content.error_messages import member_already_has_achievement_error_msg
+from src.model.achievement import Achievement
+from src.model.guild import Guild
+from src.model.guild_manager import GuildManager
+from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
 
 load_dotenv()
 

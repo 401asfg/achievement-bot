@@ -1,6 +1,6 @@
 from typing import Optional
 
-from model.inventory.inventory_item import InventoryItem
+from src.model.inventory.inventory_item import InventoryItem
 
 # TODO: add description property
 

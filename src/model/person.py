@@ -1,9 +1,9 @@
 from typing import List, Optional
 
-from model.achievement import Achievement
-from model.inventory.inventory import Inventory
+from src.model.achievement import Achievement
+from src.model.inventory.inventory import Inventory
 
-from model.inventory.inventory_item import InventoryItem
+from src.model.inventory.inventory_item import InventoryItem
 
 
 class Person(InventoryItem, Inventory[Achievement]):

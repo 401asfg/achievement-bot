@@ -2,10 +2,10 @@ import copy
 import unittest
 from typing import List, Dict, Callable
 
-from model.achievement import Achievement
-from model.guild import Guild
-from model.guild_manager import GuildManager, GuildMember
-from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from src.model.achievement import Achievement
+from src.model.guild import Guild
+from src.model.guild_manager import GuildManager, GuildMember
+from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 
 
 class TestGuildManager(unittest.TestCase):

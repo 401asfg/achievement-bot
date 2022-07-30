@@ -1,10 +1,10 @@
 import unittest
 from typing import List
 
-from model.achievement import Achievement
-from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
-from model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
-from model.person import Person
+from src.model.achievement import Achievement
+from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from src.model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
+from src.model.person import Person
 
 
 class TestPerson(unittest.TestCase):

@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod
-from typing import Optional, List
+from abc import abstractmethod
+from typing import List
 
-from persistence.writable import Writable
+from src.persistence.writable import Writable
 
 
 class WritableCollection(Writable):
