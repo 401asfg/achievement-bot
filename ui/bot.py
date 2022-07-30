@@ -11,7 +11,7 @@ from model.inventory.inventory import Inventory
 from model.person import Person
 from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
 from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
-    LIST_DESCRIPTION
+    LIST_DESCRIPTION, member_received_achievement_msg
 from content.error_messages import member_already_has_achievement_error_msg
 
 load_dotenv()
@@ -44,6 +44,7 @@ async def achieve_command(ctx, member: discord.Member, *achievement_name_segment
 
     try:
         guild_manager.add_achievement(guild_member, valid_guild_members, achievement)
+        await ctx.send(member_received_achievement_msg(guild_member.display_name, achievement_name))
     except ValueError as e:
         await ctx.send(e)
     except InventoryContainsItemError:
