@@ -4,15 +4,14 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from model.achievement import Achievement
-from model.guild_manager import GuildManager
-from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
-from model.inventory.inventory import Inventory
-from model.person import Person
-from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
 from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
     LIST_DESCRIPTION, member_received_achievement_msg
 from content.error_messages import member_already_has_achievement_error_msg
+from model.achievement import Achievement
+from model.guild import Guild
+from model.guild_manager import GuildManager
+from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
 
 load_dotenv()
 
@@ -22,7 +21,7 @@ intents.members = True
 TOKEN = os.getenv('TOKEN')
 bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
 
-guild_manager = GuildManager(Inventory[Person]())      # TODO: pass a guild created from a file?
+guild_manager = GuildManager(Guild())
 
 
 @bot.event

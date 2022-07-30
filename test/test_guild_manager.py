@@ -3,14 +3,13 @@ import unittest
 from typing import List, Dict, Callable
 
 from model.achievement import Achievement
+from model.guild import Guild
 from model.guild_manager import GuildManager, GuildMember
 from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
-from model.inventory.inventory import Inventory
-from model.person import Person
 
 
 class TestGuildManager(unittest.TestCase):
-    guild: Inventory[Person]
+    guild: Guild
     guild_manager: GuildManager
 
     MEMBER_ID_A = "Member A"
@@ -30,7 +29,7 @@ class TestGuildManager(unittest.TestCase):
     ACHIEVEMENT_NAME_C = "Achievement C"
 
     def setUp(self) -> None:
-        self.guild = Inventory[Person]()
+        self.guild = Guild()
         self.guild_manager = GuildManager(self.guild)
 
         self.member_a = GuildMember(self.MEMBER_ID_A, self.MEMBER_DISPLAY_NAME_A)

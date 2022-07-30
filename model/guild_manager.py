@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import List
 
-from model.achievement import Achievement
-from model.inventory.inventory import Inventory
-from model.person import Person
 from content.error_messages import ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG, member_not_in_server_error_msg
+from model.achievement import Achievement
+from model.guild import Guild
+from model.person import Person
 
 
 # TODO: test
@@ -24,9 +24,9 @@ class GuildManager:
     Manages a guild
     """
 
-    _guild: Inventory[Person]       # TODO: make read and write to file(s)
+    _guild: Guild
 
-    def __init__(self, guild: Inventory[Person]):
+    def __init__(self, guild: Guild):
         """
         Initializes the class
 
