@@ -1,13 +1,14 @@
-from typing import Dict, TypeVar, Generic
+from typing import Dict, TypeVar, Generic, Optional, List
 
 from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
 from model.inventory.inventory_item import InventoryItem
+from persistence.writable_collection import WritableCollection
 
 T = TypeVar("T", bound=InventoryItem)
 
 
-class Inventory(Generic[T]):
+class Inventory(Generic[T], WritableCollection):
     """
     An inventory that can hold inventory items
     """
@@ -57,3 +58,11 @@ class Inventory(Generic[T]):
             raise InventoryContainsItemError(f"The inventory already has the {item.name} item")
 
         self._items[item.name] = item
+
+    def array_to_json(self) -> List[dict]:
+        return [item.to_json() for item in self._items.values()]
+
+    def to_json(self) -> Optional[dict]:
+        return {
+            "items": self.array_to_json()
+        }

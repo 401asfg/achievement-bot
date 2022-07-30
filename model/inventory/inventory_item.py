@@ -1,4 +1,9 @@
-class InventoryItem:
+from typing import Optional
+
+from persistence.writable import Writable
+
+
+class InventoryItem(Writable):
     """
     An item that can be added to an inventory
     """
@@ -16,3 +21,8 @@ class InventoryItem:
     @property
     def name(self) -> str:
         return self._name
+
+    def to_json(self) -> Optional[dict]:
+        return {
+            "name": self._name
+        }

@@ -1,7 +1,8 @@
+from typing import Optional
+
 from model.inventory.inventory_item import InventoryItem
 
 # TODO: add description property
-# TODO: test bestower in init
 
 
 class Achievement(InventoryItem):
@@ -23,3 +24,8 @@ class Achievement(InventoryItem):
     @property
     def bestower(self) -> str:
         return self._bestower
+
+    def to_json(self) -> Optional[dict]:
+        json = super().to_json()
+        json["bestower"] = self._bestower
+        return json
