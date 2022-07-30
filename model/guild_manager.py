@@ -70,32 +70,6 @@ class GuildManager:
         self._guild.add(person)
         return person
 
-    def add_achievement(self,
-                        member: GuildMember,
-                        valid_members: List[GuildMember],
-                        achievement_name: str,
-                        bestower: str):
-        """
-        Add a new achievement with the given achievement_name to the given member if it is in the given valid_members
-        list
-
-        :param member: The member to add the achievement to
-        :param valid_members: The list of members that the given member has to be in
-        :param achievement_name: The name that the achievement to add to the member has
-        :param bestower: The person that instructed the achievement to be bestowed to the given member
-        :raise ValueError: If the given member is the given bestower, or if the given member is not in the given
-        valid_members list adder
-        :raise InventoryContainsItemError: If the given member already contains an achievement that has the given
-        achievement_name
-        """
-
-        if member.id == bestower:
-            raise ValueError(ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG)
-
-        person = self.query_guild(member, valid_members)
-        achievement = Achievement(achievement_name, bestower)
-        person.add(achievement)
-
     def get_achievements(self, member: GuildMember, valid_members: List[GuildMember]) -> List[Achievement]:
         """
         Gets the list of all the achievements that the given member has attained, if the given member is in the given
@@ -108,3 +82,23 @@ class GuildManager:
         """
         person = self.query_guild(member, valid_members)
         return person.get_achievements()
+
+    def add_achievement(self, member: GuildMember, valid_members: List[GuildMember], achievement: Achievement):
+        """
+        Add a new achievement with the given achievement_name to the given member if it is in the given valid_members
+        list
+
+        :param member: The member to add the achievement to
+        :param valid_members: The list of members that the given member has to be in
+        :param achievement: The achievement to add to the person in the guild that corresponds to the given member
+        :raise ValueError: If the given member is the given bestower, or if the given member is not in the given
+        valid_members list adder
+        :raise InventoryContainsItemError: If the given member already contains an achievement that has the given
+        achievement_name
+        """
+
+        if member.id == achievement.bestower:
+            raise ValueError(ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG)
+
+        person = self.query_guild(member, valid_members)
+        person.add(achievement)

@@ -4,14 +4,14 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from model.achievement import Achievement
 from model.guild_manager import GuildManager
 from model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from model.inventory.inventory import Inventory
 from model.person import Person
 from ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
-from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, \
-    ACHIEVE_DESCRIPTION, LIST_NAME, \
-    LIST_HELP, LIST_DESCRIPTION
+from content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
+    LIST_DESCRIPTION
 from content.error_messages import member_already_has_achievement_error_msg
 
 load_dotenv()
@@ -34,14 +34,16 @@ async def on_message(message):
 async def achieve_command(ctx, member: discord.Member, *achievement_name_segments: str):
     guild_member = create_guild_member(member)
     valid_guild_members = create_guild_members(ctx.guild.members)
+
     achievement_name = " ".join(achievement_name_segments)
+    achievement = Achievement(achievement_name, ctx.message.author.id)
 
     # TODO: remove this test code
     await ctx.send('Valid Guild Members:')
     [await ctx.send({valid_guild_member.display_name}) for valid_guild_member in valid_guild_members]
 
     try:
-        guild_manager.add_achievement(guild_member, valid_guild_members, achievement_name, ctx.message.author.id)
+        guild_manager.add_achievement(guild_member, valid_guild_members, achievement)
     except ValueError as e:
         await ctx.send(e)
     except InventoryContainsItemError:

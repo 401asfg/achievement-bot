@@ -52,75 +52,13 @@ class TestGuildManager(unittest.TestCase):
     def test_init(self):
         self.assert_guild_members_state([])
 
-    def test_query_guild(self):
-        def assert_pass(member: GuildMember,
-                        valid_members: List[GuildMember],
-                        expected_guild_members: List[GuildMember]):
-            try:
-                actual_person = self.guild_manager.query_guild(member, valid_members)
-                self.assertEqual(member.id, actual_person.name)
-            except ValueError:
-                self.fail()
+    def assert_achievements(self, expected_achievements: List[Achievement], actual_achievements: List[Achievement]):
 
-            self.assert_guild_members_state(expected_guild_members)
+        # NOTE: Expected achievements' bestower values are irrelevant
+        self.assertEqual(len(expected_achievements), len(actual_achievements))
 
-        def assert_fail(member: GuildMember,
-                        valid_members: List[GuildMember],
-                        expected_guild_members: List[GuildMember]):
-            try:
-                self.guild_manager.query_guild(member, valid_members)
-                self.fail()
-            except ValueError:
-                pass
-
-            self.assert_guild_members_state(expected_guild_members)
-
-        def assert_valid_members_cases(member: GuildMember,
-                                       expected_guild_members_pre_pass: List[GuildMember]):
-            expected_guild_members_pre_pass_copy = copy.deepcopy(expected_guild_members_pre_pass)
-
-            # Empty Valid Members
-            valid_members = []
-            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
-
-            # Valid Members Doesn't Contain Member
-            other_members = [self.member_a, self.member_b, self.member_c]
-            other_members.remove(member)
-
-            valid_members.append(other_members[0])
-            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
-
-            valid_members.append(other_members[1])
-            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
-
-            # Valid Members Contains Member
-            valid_members.append(member)
-
-            expected_guild_members = expected_guild_members_pre_pass_copy
-
-            if member not in expected_guild_members:
-                expected_guild_members.append(member)
-
-            assert_pass(member, valid_members, expected_guild_members)
-
-        guild_members_pre_pass = []
-        assert_valid_members_cases(self.member_a, guild_members_pre_pass)
-
-        guild_members_pre_pass.append(self.member_a)
-        assert_valid_members_cases(self.member_a, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_b, guild_members_pre_pass)
-
-        guild_members_pre_pass.append(self.member_b)
-        assert_valid_members_cases(self.member_b, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_a, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_b, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_c, guild_members_pre_pass)
-
-        guild_members_pre_pass.append(self.member_c)
-        assert_valid_members_cases(self.member_c, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_b, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_a, guild_members_pre_pass)
-        assert_valid_members_cases(self.member_c, guild_members_pre_pass)
+        for i in range(len(expected_achievements)):
+            self.assertEqual(expected_achievements[i].name, actual_achievements[i].name)
 
     def assert_guild_member_achievements_state(self, expected_state: Dict[GuildMember, List[Achievement]]):
         self.assert_guild_members_state(list(expected_state.keys()))
@@ -129,14 +67,7 @@ class TestGuildManager(unittest.TestCase):
             actual_person = self.guild.get(expected_guild_member.id)
             actual_achievements = actual_person.get_achievements()
 
-            self.assertEqual(len(expected_achievements), len(actual_achievements))
-
-            expected_achievement_names = [expected_achievement.name for expected_achievement in expected_achievements]
-            actual_achievement_names = [actual_achievement.name for actual_achievement in actual_achievements]
-
-            # NOTE: Expected achievements' bestower values are irrelevant
-            [self.assertTrue(expected_achievement_name in actual_achievement_names)
-             for expected_achievement_name in expected_achievement_names]
+            self.assert_achievements(expected_achievements, actual_achievements)
 
     def assert_add_achievement_pass(self,
                                     member: GuildMember,
@@ -145,7 +76,8 @@ class TestGuildManager(unittest.TestCase):
                                     bestower: str,
                                     expected_state_pre_pass: Dict[GuildMember, List[Achievement]]):
         try:
-            self.guild_manager.add_achievement(member, valid_members, achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower)
+            self.guild_manager.add_achievement(member, valid_members, achievement)
             actual_person = self.guild.get(member.id)
             actual_achievement = actual_person.get(achievement_name)
             self.assertEqual(achievement_name, actual_achievement.name)
@@ -171,7 +103,8 @@ class TestGuildManager(unittest.TestCase):
                                            bestower: str,
                                            expected_state: Dict[GuildMember, List[Achievement]]):
         try:
-            self.guild_manager.add_achievement(member, valid_members, achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower)
+            self.guild_manager.add_achievement(member, valid_members, achievement)
             self.fail()
         except ValueError:
             pass
@@ -187,7 +120,8 @@ class TestGuildManager(unittest.TestCase):
                                                bestower: str,
                                                expected_state: Dict[GuildMember, List[Achievement]]):
         try:
-            self.guild_manager.add_achievement(member, valid_members, achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower)
+            self.guild_manager.add_achievement(member, valid_members, achievement)
             self.fail()
         except ValueError:
             self.fail()
@@ -494,6 +428,90 @@ class TestGuildManager(unittest.TestCase):
                                                 expected_state_pre_pass)
 
     # TODO: write tests for get achievements method
+
+    def test_get_achievements(self):
+        def assert_pass(member: GuildMember,
+                        valid_members: List[GuildMember],
+                        expected_guild_members: List[GuildMember],
+                        expected_achievements: List[Achievement]):
+            try:
+                actual_achievements = self.guild_manager.get_achievements(member, valid_members)
+                self.assert_achievements(expected_achievements, actual_achievements)
+            except ValueError:
+                self.fail()
+
+            self.assert_guild_members_state(expected_guild_members)
+
+        def assert_fail(member: GuildMember,
+                        valid_members: List[GuildMember],
+                        expected_guild_members: List[GuildMember]):
+            try:
+                self.guild_manager.get_achievements(member, valid_members)
+                self.fail()
+            except ValueError:
+                pass
+
+            self.assert_guild_members_state(expected_guild_members)
+
+        def assert_valid_members_cases(member: GuildMember,
+                                       expected_guild_members_pre_pass: List[GuildMember],
+                                       expected_achievements_post_pass: List[Achievement]):
+            expected_guild_members_pre_pass_copy = copy.deepcopy(expected_guild_members_pre_pass)
+
+            # Empty Valid Members
+            valid_members = []
+            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
+
+            # Valid Members Doesn't Contain Member
+            other_members = [self.member_a, self.member_b, self.member_c]
+            other_members.remove(member)
+
+            valid_members.append(other_members[0])
+            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
+
+            valid_members.append(other_members[1])
+            assert_fail(member, valid_members, expected_guild_members_pre_pass_copy)
+
+            # Valid Members Contains Member
+            valid_members.append(member)
+
+            expected_guild_members = expected_guild_members_pre_pass_copy
+
+            if member not in expected_guild_members:
+                expected_guild_members.append(member)
+
+            assert_pass(member, valid_members, expected_guild_members, expected_achievements_post_pass)
+
+        guild_members_pre_pass = []
+        assert_valid_members_cases(self.member_a, guild_members_pre_pass, [])
+
+        guild_members_pre_pass.append(self.member_a)
+        achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, "")
+        self.guild_manager.add_achievement(self.member_a, [self.member_a], achievement_a)
+
+        assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a])
+        assert_valid_members_cases(self.member_b, guild_members_pre_pass, [])
+
+        guild_members_pre_pass.append(self.member_b)
+        achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, "")
+        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_b)
+        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_a)
+
+        assert_valid_members_cases(self.member_b, guild_members_pre_pass, [achievement_b, achievement_a])
+        assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a])
+        assert_valid_members_cases(self.member_b, guild_members_pre_pass, [achievement_b, achievement_a])
+        assert_valid_members_cases(self.member_c, guild_members_pre_pass, [])
+
+        guild_members_pre_pass.append(self.member_c)
+        achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, "")
+        self.guild_manager.add_achievement(self.member_a, [self.member_a], achievement_c)
+        self.guild_manager.add_achievement(self.member_c, [self.member_c], achievement_a)
+        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_c)
+
+        assert_valid_members_cases(self.member_c, guild_members_pre_pass, [achievement_a])
+        assert_valid_members_cases(self.member_b, guild_members_pre_pass, [achievement_b, achievement_a, achievement_c])
+        assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a, achievement_c])
+        assert_valid_members_cases(self.member_c, guild_members_pre_pass, [achievement_a])
 
 
 if __name__ == '__main__':
