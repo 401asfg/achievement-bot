@@ -16,7 +16,9 @@ class TestAchievement(unittest.TestCase):
         def assert_init(name: str, bestower: str):
             achievement: Achievement
             achievement = Achievement(name, bestower)
+
             self.assertEqual(name, achievement.name)
+            self.assertEqual(bestower, achievement.bestower)
 
         assert_init(self.NAME_A, self.BESTOWER_A)
         assert_init(self.NAME_B, self.BESTOWER_B)

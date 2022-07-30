@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from model.achievement import Achievement
 from model.inventory.inventory import Inventory
@@ -20,3 +20,8 @@ class Person(InventoryItem, Inventory[Achievement]):
         :return: All of the achievements that the person has
         """
         return list(self._items.values())
+
+    def to_json(self) -> Optional[dict]:
+        json = super().to_json()
+        json["items"] = super().array_to_json()
+        return json
