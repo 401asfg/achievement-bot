@@ -8,6 +8,9 @@ from src.model.guild_manager import GuildManager, GuildMember
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 
 
+# TODO: test using a different guild
+
+
 class TestGuildManager(unittest.TestCase):
     guild: Guild
     guild_manager: GuildManager
@@ -30,23 +33,17 @@ class TestGuildManager(unittest.TestCase):
 
     def setUp(self) -> None:
         self.guild = Guild()
-        self.guild_manager = GuildManager(self.guild)
+        self.guild_manager = GuildManager()
 
         self.member_a = GuildMember(self.MEMBER_ID_A, self.MEMBER_DISPLAY_NAME_A)
         self.member_b = GuildMember(self.MEMBER_ID_B, self.MEMBER_DISPLAY_NAME_B)
         self.member_c = GuildMember(self.MEMBER_ID_C, self.MEMBER_DISPLAY_NAME_C)
 
     def assert_guild_members_state(self, expected_guild_members: List[GuildMember]):
-        self.assertEqual(len(expected_guild_members), self.guild_manager.guild_size())
-
-        self.assertEqual(self.member_a in expected_guild_members,
-                         self.guild_manager.guild_contains(self.MEMBER_ID_A))
-
-        self.assertEqual(self.member_b in expected_guild_members,
-                         self.guild_manager.guild_contains(self.MEMBER_ID_B))
-
-        self.assertEqual(self.member_c in expected_guild_members,
-                         self.guild_manager.guild_contains(self.MEMBER_ID_C))
+        self.assertEqual(len(expected_guild_members), self.guild.size())
+        self.assertEqual(self.member_a in expected_guild_members, self.guild.contains(self.MEMBER_ID_A))
+        self.assertEqual(self.member_b in expected_guild_members, self.guild.contains(self.MEMBER_ID_B))
+        self.assertEqual(self.member_c in expected_guild_members, self.guild.contains(self.MEMBER_ID_C))
 
     def test_init(self):
         self.assert_guild_members_state([])
@@ -76,7 +73,7 @@ class TestGuildManager(unittest.TestCase):
                                     expected_state_pre_pass: Dict[GuildMember, List[Achievement]]):
         try:
             achievement = Achievement(achievement_name, bestower)
-            self.guild_manager.add_achievement(member, valid_members, achievement)
+            self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             actual_person = self.guild.get(member.id)
             actual_achievement = actual_person.get(achievement_name)
             self.assertEqual(achievement_name, actual_achievement.name)
@@ -103,7 +100,7 @@ class TestGuildManager(unittest.TestCase):
                                            expected_state: Dict[GuildMember, List[Achievement]]):
         try:
             achievement = Achievement(achievement_name, bestower)
-            self.guild_manager.add_achievement(member, valid_members, achievement)
+            self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             self.fail()
         except ValueError:
             pass
@@ -120,7 +117,7 @@ class TestGuildManager(unittest.TestCase):
                                                expected_state: Dict[GuildMember, List[Achievement]]):
         try:
             achievement = Achievement(achievement_name, bestower)
-            self.guild_manager.add_achievement(member, valid_members, achievement)
+            self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             self.fail()
         except ValueError:
             self.fail()
@@ -224,8 +221,8 @@ class TestGuildManager(unittest.TestCase):
                                                 expected_state_pre_pass)
 
     def test_add_achievements_start_with_members(self):
-        self.guild_manager.query_guild(self.member_a, [self.member_a])
-        self.guild_manager.query_guild(self.member_b, [self.member_b])
+        self.guild_manager.query_guild(self.guild, self.member_a, [self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_b, [self.member_b])
 
         expected_state_pre_pass = {self.member_a: [],
                                    self.member_b: []}
@@ -262,9 +259,9 @@ class TestGuildManager(unittest.TestCase):
                                                 expected_state_pre_pass)
 
     def test_add_achievement_other_person_has_same_achievement_start_with_members(self):
-        self.guild_manager.query_guild(self.member_a, [self.member_a])
-        self.guild_manager.query_guild(self.member_b, [self.member_b])
-        self.guild_manager.query_guild(self.member_c, [self.member_c])
+        self.guild_manager.query_guild(self.guild, self.member_a, [self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_b, [self.member_b])
+        self.guild_manager.query_guild(self.guild, self.member_c, [self.member_c])
 
         expected_state_pre_pass = {self.member_a: [],
                                    self.member_b: [],
@@ -335,8 +332,8 @@ class TestGuildManager(unittest.TestCase):
                                                 expected_state_pre_pass)
 
     def test_add_achievement_already_has_achievement_start_with_members(self):
-        self.guild_manager.query_guild(self.member_b, [self.member_b])
-        self.guild_manager.query_guild(self.member_c, [self.member_c])
+        self.guild_manager.query_guild(self.guild, self.member_b, [self.member_b])
+        self.guild_manager.query_guild(self.guild, self.member_c, [self.member_c])
 
         expected_state_pre_pass = {self.member_b: [],
                                    self.member_c: []}
@@ -369,7 +366,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        self.guild_manager.query_guild(self.member_a, [self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_a, [self.member_a])
         expected_state_pre_pass[self.member_a] = []
 
         self.assert_add_achievement_input_cases(self.member_a,
@@ -404,9 +401,9 @@ class TestGuildManager(unittest.TestCase):
                                                 expected_state_pre_pass)
 
     def test_add_achievement_already_has_achievement_others_have_nothing_start_with_members(self):
-        self.guild_manager.query_guild(self.member_b, [self.member_c, self.member_b, self.member_a])
-        self.guild_manager.query_guild(self.member_c, [self.member_c, self.member_b, self.member_a])
-        self.guild_manager.query_guild(self.member_a, [self.member_c, self.member_b, self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_b, [self.member_c, self.member_b, self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_c, [self.member_c, self.member_b, self.member_a])
+        self.guild_manager.query_guild(self.guild, self.member_a, [self.member_c, self.member_b, self.member_a])
 
         expected_state_pre_pass = {self.member_b: [],
                                    self.member_c: [],
@@ -434,7 +431,7 @@ class TestGuildManager(unittest.TestCase):
                         expected_guild_members: List[GuildMember],
                         expected_achievements: List[Achievement]):
             try:
-                actual_achievements = self.guild_manager.get_achievements(member, valid_members)
+                actual_achievements = self.guild_manager.get_achievements(self.guild, member, valid_members)
                 self.assert_achievements(expected_achievements, actual_achievements)
             except ValueError:
                 self.fail()
@@ -445,7 +442,7 @@ class TestGuildManager(unittest.TestCase):
                         valid_members: List[GuildMember],
                         expected_guild_members: List[GuildMember]):
             try:
-                self.guild_manager.get_achievements(member, valid_members)
+                self.guild_manager.get_achievements(self.guild, member, valid_members)
                 self.fail()
             except ValueError:
                 pass
@@ -486,15 +483,15 @@ class TestGuildManager(unittest.TestCase):
 
         guild_members_pre_pass.append(self.member_a)
         achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, "")
-        self.guild_manager.add_achievement(self.member_a, [self.member_a], achievement_a)
+        self.guild_manager.add_achievement(self.guild, self.member_a, [self.member_a], achievement_a)
 
         assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a])
         assert_valid_members_cases(self.member_b, guild_members_pre_pass, [])
 
         guild_members_pre_pass.append(self.member_b)
         achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, "")
-        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_b)
-        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_a)
+        self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_b)
+        self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_a)
 
         assert_valid_members_cases(self.member_b, guild_members_pre_pass, [achievement_b, achievement_a])
         assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a])
@@ -503,9 +500,9 @@ class TestGuildManager(unittest.TestCase):
 
         guild_members_pre_pass.append(self.member_c)
         achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, "")
-        self.guild_manager.add_achievement(self.member_a, [self.member_a], achievement_c)
-        self.guild_manager.add_achievement(self.member_c, [self.member_c], achievement_a)
-        self.guild_manager.add_achievement(self.member_b, [self.member_b], achievement_c)
+        self.guild_manager.add_achievement(self.guild, self.member_a, [self.member_a], achievement_c)
+        self.guild_manager.add_achievement(self.guild, self.member_c, [self.member_c], achievement_a)
+        self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_c)
 
         assert_valid_members_cases(self.member_c, guild_members_pre_pass, [achievement_a])
         assert_valid_members_cases(self.member_b, guild_members_pre_pass, [achievement_b, achievement_a, achievement_c])
