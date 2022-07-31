@@ -13,6 +13,8 @@ class Inventory(Generic[T], WritableCollection):
     An inventory that can hold inventory items
     """
 
+    ITEMS_JSON_KEY = "items"
+
     _items: Dict[str, T]
 
     def __init__(self):
@@ -64,5 +66,5 @@ class Inventory(Generic[T], WritableCollection):
 
     def to_json(self) -> Optional[dict]:
         return {
-            "items": self.array_to_json()
+            self.ITEMS_JSON_KEY: self.array_to_json()
         }

@@ -21,34 +21,13 @@ class GuildManager:
     Manages a guild
     """
 
-    _guild: Guild
+    @staticmethod
+    def query_guild(guild: Guild, member: GuildMember, valid_members: List[GuildMember]) -> Person:
+        """
+        Get the person with the same name as the given member if it is in the given guild's given valid_members list;
+        also add the given member to the guild if it is not already in the guild but is in the given valid_members list
 
-    def __init__(self, guild: Guild):
-        """
-        Initializes the class
-
-        :param guild: The guild to manage
-        """
-        self._guild = guild
-
-    def guild_size(self) -> int:
-        """
-        :return: The number of people in the guild
-        """
-        return self._guild.size()
-
-    def guild_contains(self, person_name: str) -> bool:
-        """
-        :param person_name: The name of person to check the guild for
-        :return: True if the person of the given person_name is in the guild; otherwise, False
-        """
-        return self._guild.contains(person_name)
-
-    def query_guild(self, member: GuildMember, valid_members: List[GuildMember]) -> Person:
-        """
-        Get the person with the same name as the given member if it is in the guild's given valid_members list; also
-        add the given member to the guild if it is not already in the guild but is in the given valid_members list
-
+        :param guild: The guild to query
         :param member: The member with the same name as the member to get
         :param valid_members: The list of members that the given member must be in to be retrieved
         :return: The person with the same name as the given member
@@ -60,31 +39,42 @@ class GuildManager:
         if member.id not in valid_member_ids:
             raise ValueError(member_not_in_server_error_msg(member.display_name))
 
-        if self._guild.contains(member.id):
-            return self._guild.get(member.id)
+        if guild.contains(member.id):
+            return guild.get(member.id)
 
         person = Person(member.id)
-        self._guild.add(person)
+        guild.add(person)
         return person
 
-    def get_achievements(self, member: GuildMember, valid_members: List[GuildMember]) -> List[Achievement]:
+    @classmethod
+    def get_achievements(cls,
+                         guild: Guild,
+                         member: GuildMember,
+                         valid_members: List[GuildMember]) -> List[Achievement]:
         """
-        Gets the list of all the achievements that the given member has attained, if the given member is in the given
-        valid_members list
+        Gets the list of all the achievements that the given member in the given guild has attained, if the given
+        member is in the given valid_members list
 
+        :param guild: The guild to get the achievements of its given member
         :param member: The member to list the achievements of
         :param valid_members: The list of members that the given member has to be in
         :return: The list of all the achievements that the given member has attained
         :raise ValueError: If the given member is not in the given valid_members list
         """
-        person = self.query_guild(member, valid_members)
+        person = cls.query_guild(guild, member, valid_members)
         return person.get_achievements()
 
-    def add_achievement(self, member: GuildMember, valid_members: List[GuildMember], achievement: Achievement):
+    @classmethod
+    def add_achievement(cls,
+                        guild: Guild,
+                        member: GuildMember,
+                        valid_members: List[GuildMember],
+                        achievement: Achievement):
         """
-        Add a new achievement with the given achievement_name to the given member if it is in the given valid_members
-        list
+        Add a new achievement with the given achievement_name to the given member in the given guild if it is in the
+        given valid_members list
 
+        :param guild: The guild to add the given achievement to its given member
         :param member: The member to add the achievement to
         :param valid_members: The list of members that the given member has to be in
         :param achievement: The achievement to add to the person in the guild that corresponds to the given member
@@ -97,5 +87,5 @@ class GuildManager:
         if member.id == achievement.bestower:
             raise ValueError(ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG)
 
-        person = self.query_guild(member, valid_members)
+        person = cls.query_guild(guild, member, valid_members)
         person.add(achievement)

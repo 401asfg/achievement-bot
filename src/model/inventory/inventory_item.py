@@ -8,6 +8,8 @@ class InventoryItem(Writable):
     An item that can be added to an inventory
     """
 
+    NAME_JSON_KEY = "name"
+
     _name: str
 
     def __init__(self, name: str):
@@ -24,5 +26,5 @@ class InventoryItem(Writable):
 
     def to_json(self) -> Optional[dict]:
         return {
-            "name": self._name
+            self.NAME_JSON_KEY: self._name
         }

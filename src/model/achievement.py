@@ -9,6 +9,9 @@ class Achievement(InventoryItem):
     """
     An achievement that a person can have
     """
+
+    BESTOWER_JSON_KEY = "bestower"
+
     _bestower: str
 
     def __init__(self, name: str, bestower: str):
@@ -27,5 +30,5 @@ class Achievement(InventoryItem):
 
     def to_json(self) -> Optional[dict]:
         json = super().to_json()
-        json["bestower"] = self._bestower
+        json[self.BESTOWER_JSON_KEY] = self._bestower
         return json

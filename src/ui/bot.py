@@ -8,10 +8,14 @@ from src.content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_
     LIST_DESCRIPTION, member_received_achievement_msg
 from src.content.error_messages import member_already_has_achievement_error_msg
 from src.model.achievement import Achievement
-from src.model.guild import Guild
 from src.model.guild_manager import GuildManager
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
+from src.persistence.guild_save_system import GuildSaveSystem
 from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
+
+guild_manager = GuildManager()
+guild_save_system = GuildSaveSystem()
+guild = guild_save_system.load()
 
 load_dotenv()
 
@@ -20,8 +24,6 @@ intents.members = True
 
 TOKEN = os.getenv('TOKEN')
 bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
-
-guild_manager = GuildManager(Guild())
 
 
 @bot.event
@@ -42,8 +44,9 @@ async def achieve_command(ctx, member: discord.Member, *achievement_name_segment
     [await ctx.send({valid_guild_member.display_name}) for valid_guild_member in valid_guild_members]
 
     try:
-        guild_manager.add_achievement(guild_member, valid_guild_members, achievement)
+        guild_manager.add_achievement(guild, guild_member, valid_guild_members, achievement)
         await ctx.send(member_received_achievement_msg(guild_member.display_name, achievement_name))
+        guild_save_system.save(guild)
     except ValueError as e:
         await ctx.send(e)
     except InventoryContainsItemError:
@@ -60,9 +63,10 @@ async def list_command(ctx, member: discord.Member):
     [await ctx.send({valid_guild_member.display_name}) for valid_guild_member in valid_guild_members]
 
     try:
-        achievements = guild_manager.get_achievements(guild_member, valid_guild_members)
+        achievements = guild_manager.get_achievements(guild, guild_member, valid_guild_members)
         achievement_list_msg = create_achievement_list_msg(achievements, guild_member)
         await ctx.send(achievement_list_msg)
+        guild_save_system.save(guild)
     except ValueError as e:
         await ctx.send(e)
 

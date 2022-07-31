@@ -23,5 +23,5 @@ class Person(InventoryItem, Inventory[Achievement]):
 
     def to_json(self) -> Optional[dict]:
         json = super().to_json()
-        json["items"] = super().array_to_json()
+        json[self.ITEMS_JSON_KEY] = super().array_to_json()
         return json
