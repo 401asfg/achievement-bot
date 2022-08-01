@@ -1,5 +1,3 @@
-# TODO: test
-
 import json
 
 from src.model.guild import Guild
@@ -22,11 +20,16 @@ class JsonWriter:
 
     def write(self, guild: Guild):
         """
-        Writes the given guild to a JSON file at the destination
+        Writes the given guild to a JSON file at the destination; creates a file at the destination if it does not
+        already exist and writes to it
 
         :param guild: The guild to write to a JSON file
         """
 
-        with open(self._destination, 'w') as f:
+        with open(self._destination, 'w+') as f:
             guild_json = guild.to_json()
             json.dump(guild_json, f)
+
+    @property
+    def destination(self) -> str:
+        return self._destination

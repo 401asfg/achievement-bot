@@ -1,5 +1,3 @@
-# TODO: test
-
 import json
 from typing import List
 
@@ -27,12 +25,17 @@ class JsonReader:
         """
         Reads a guild from a JSON file at the destination
 
+        :raise IOError: If there is no file at the destination
         :return: The guild that was read from a JSON file
         """
 
         with open(self._destination, 'r') as f:
             guild_json = json.load(f)
             return self._parse_guild(guild_json)
+
+    @property
+    def destination(self) -> str:
+        return self._destination
 
     @classmethod
     def _parse_guild(cls, json_object: dict) -> Guild:
