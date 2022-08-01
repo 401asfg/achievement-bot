@@ -1,4 +1,5 @@
 import unittest
+from typing import List
 
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from src.model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
@@ -135,6 +136,65 @@ class TestInventory(unittest.TestCase):
         assert_pass(self.NAME_B, self.item_b)
         assert_pass(self.NAME_C, self.item_c)
         assert_pass(self.NAME_D, self.item_d)
+
+    def test_array_to_json(self):
+        def assert_array_to_json(inventory: Inventory, expected_json_array: List[dict]):
+            actual_json_array = inventory.array_to_json()
+            self.assertEqual(expected_json_array, actual_json_array)
+
+        assert_array_to_json(self.inventory, [])
+
+        self.inventory.add(self.item_a)
+        assert_array_to_json(self.inventory, [{InventoryItem.NAME_JSON_KEY: self.NAME_A}])
+
+        self.inventory.add(self.item_c)
+        self.inventory.add(self.item_b)
+        self.inventory.add(self.item_d)
+        assert_array_to_json(self.inventory, [
+            {
+                InventoryItem.NAME_JSON_KEY: self.NAME_A
+            },
+            {
+                InventoryItem.NAME_JSON_KEY: self.NAME_C
+            },
+            {
+                InventoryItem.NAME_JSON_KEY: self.NAME_B
+            },
+            {
+                InventoryItem.NAME_JSON_KEY: self.NAME_D
+            },
+        ])
+
+    def test_to_json(self):
+        def assert_to_json(inventory: Inventory, expected_json_object: dict):
+            actual_json_object = inventory.to_json()
+            self.assertEqual(expected_json_object, actual_json_object)
+
+        assert_to_json(self.inventory, {Inventory.ITEMS_JSON_KEY: []})
+
+        self.inventory.add(self.item_a)
+        assert_to_json(self.inventory, {Inventory.ITEMS_JSON_KEY: [{InventoryItem.NAME_JSON_KEY: self.NAME_A}]})
+
+        self.inventory.add(self.item_c)
+        self.inventory.add(self.item_b)
+        self.inventory.add(self.item_d)
+        assert_to_json(self.inventory,
+                       {
+                           Inventory.ITEMS_JSON_KEY: [
+                               {
+                                   InventoryItem.NAME_JSON_KEY: self.NAME_A
+                               },
+                               {
+                                   InventoryItem.NAME_JSON_KEY: self.NAME_C
+                               },
+                               {
+                                   InventoryItem.NAME_JSON_KEY: self.NAME_B
+                               },
+                               {
+                                   InventoryItem.NAME_JSON_KEY: self.NAME_D
+                               },
+                           ]
+                       })
 
 
 if __name__ == '__main__':

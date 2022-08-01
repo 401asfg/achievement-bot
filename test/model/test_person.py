@@ -160,6 +160,40 @@ class TestPerson(unittest.TestCase):
         assert_pass(self.ACHIEVEMENT_NAME_C, self.achievement_c)
         assert_pass(self.ACHIEVEMENT_NAME_D, self.achievement_d)
 
+    def test_to_json(self):
+        def assert_to_json(person: Person, expected_json: dict):
+            actual_json = person.to_json()
+            self.assertEqual(expected_json, actual_json)
+
+        assert_to_json(self.person,
+                       {
+                           Person.NAME_JSON_KEY: self.PERSON_NAME,
+                           Person.ITEMS_JSON_KEY: []
+                       })
+
+        self.person.add(self.achievement_a)
+        self.person.add(self.achievement_b)
+        self.person.add(self.achievement_d)
+
+        assert_to_json(self.person,
+                       {
+                           Person.NAME_JSON_KEY: self.PERSON_NAME,
+                           Person.ITEMS_JSON_KEY: [
+                               {
+                                   Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_A,
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_A
+                               },
+                               {
+                                   Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_B,
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_B
+                               },
+                               {
+                                   Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_D,
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_D
+                               }
+                           ]
+                       })
+
 
 if __name__ == '__main__':
     unittest.main()

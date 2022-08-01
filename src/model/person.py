@@ -12,6 +12,11 @@ class Person(InventoryItem, Inventory[Achievement]):
     """
 
     def __init__(self, name: str):
+        """
+        Initializes the class
+
+        :param name: The name of the person
+        """
         super().__init__(name)
         self._items = {}            # TODO: discover a way to inherit this from Inventory
 
