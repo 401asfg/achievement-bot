@@ -1,4 +1,4 @@
-# TODO: test
+from pathlib import Path
 
 from src.model.guild import Guild
 
@@ -11,7 +11,7 @@ class GuildSaveSystem:
     Saves and loads a guild
     """
 
-    JSON_STORE = ""
+    JSON_STORE: Path = Path(__file__).parent / Path("../../data/guild.json")
 
     _json_writer: JsonWriter
     _json_reader: JsonReader
@@ -25,7 +25,8 @@ class GuildSaveSystem:
 
     def save(self, guild: Guild):
         """
-        Saves the given guild to a JSON file located at JSON_STORE
+        Saves the given guild to a JSON file located at JSON_STORE; creates a file at the destination if it does not
+        already exist and writes to it
 
         :param guild: The guild to save
         """
@@ -35,6 +36,7 @@ class GuildSaveSystem:
         """
         Loads a guild from a JSON file located at JSON_Store
 
+        :raise FileNotFoundError: If there is no file at JSON_STORE
         :return: The guild that was loaded
         """
         return self._json_reader.read()

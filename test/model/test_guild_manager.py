@@ -8,9 +8,6 @@ from src.model.guild_manager import GuildManager, GuildMember
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 
 
-# TODO: test using a different guild
-
-
 class TestGuildManager(unittest.TestCase):
     guild: Guild
     guild_manager: GuildManager
@@ -422,8 +419,6 @@ class TestGuildManager(unittest.TestCase):
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
-
-    # TODO: write tests for get achievements method
 
     def test_get_achievements(self):
         def assert_pass(member: GuildMember,

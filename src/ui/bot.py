@@ -11,7 +11,10 @@ from src.model.achievement import Achievement
 from src.model.guild_manager import GuildManager
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from src.persistence.guild_save_system import GuildSaveSystem
-from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg
+from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg, send_msg
+
+# TODO: command error handling
+
 
 guild_manager = GuildManager()
 guild_save_system = GuildSaveSystem()
@@ -31,26 +34,25 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+# TODO: pull contents of command functions into model section so these functions have minimal code in them
+
+
 @bot.command(name=ACHIEVE_NAME, help=ACHIEVE_HELP, brief=ACHIEVE_DESCRIPTION)
 async def achieve_command(ctx, member: discord.Member, *achievement_name_segments: str):
     guild_member = create_guild_member(member)
     valid_guild_members = create_guild_members(ctx.guild.members)
 
     achievement_name = " ".join(achievement_name_segments)
-    achievement = Achievement(achievement_name, ctx.message.author.id)
-
-    # TODO: remove this test code
-    await ctx.send('Valid Guild Members:')
-    [await ctx.send({valid_guild_member.display_name}) for valid_guild_member in valid_guild_members]
 
     try:
+        achievement = Achievement(achievement_name, ctx.message.author.name)
         guild_manager.add_achievement(guild, guild_member, valid_guild_members, achievement)
-        await ctx.send(member_received_achievement_msg(guild_member.display_name, achievement_name))
+        await send_msg(ctx, member_received_achievement_msg(guild_member.display_name, achievement_name))
         guild_save_system.save(guild)
     except ValueError as e:
-        await ctx.send(e)
+        await send_msg(ctx, str(e))
     except InventoryContainsItemError:
-        await ctx.send(member_already_has_achievement_error_msg(guild_member.display_name, achievement_name))
+        await send_msg(ctx, member_already_has_achievement_error_msg(guild_member.display_name, achievement_name))
 
 
 @bot.command(name=LIST_NAME, help=LIST_HELP, brief=LIST_DESCRIPTION)
@@ -58,17 +60,13 @@ async def list_command(ctx, member: discord.Member):
     guild_member = create_guild_member(member)
     valid_guild_members = create_guild_members(ctx.guild.members)
 
-    # TODO: remove this test code
-    await ctx.send('Valid Guild Members:')
-    [await ctx.send({valid_guild_member.display_name}) for valid_guild_member in valid_guild_members]
-
     try:
         achievements = guild_manager.get_achievements(guild, guild_member, valid_guild_members)
         achievement_list_msg = create_achievement_list_msg(achievements, guild_member)
-        await ctx.send(achievement_list_msg)
+        await send_msg(ctx, achievement_list_msg)
         guild_save_system.save(guild)
     except ValueError as e:
-        await ctx.send(e)
+        await send_msg(ctx, str(e))
 
 
 bot.run(TOKEN)

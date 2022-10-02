@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from typing import List
 
 from src.model.achievement import Achievement
@@ -11,9 +12,9 @@ class JsonReader:
     Reads JSON data from a JSON file
     """
 
-    _destination: str
+    _destination: Path
 
-    def __init__(self, destination):
+    def __init__(self, destination: Path):
         """
         Initializes the class
 
@@ -25,7 +26,7 @@ class JsonReader:
         """
         Reads a guild from a JSON file at the destination
 
-        :raise IOError: If there is no file at the destination
+        :raise FileNotFoundError: If there is no file at the destination
         :return: The guild that was read from a JSON file
         """
 
@@ -34,7 +35,7 @@ class JsonReader:
             return self._parse_guild(guild_json)
 
     @property
-    def destination(self) -> str:
+    def destination(self) -> Path:
         return self._destination
 
     @classmethod

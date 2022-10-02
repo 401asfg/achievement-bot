@@ -1,4 +1,5 @@
 ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG = "You cannot add an achievement to yourself"
+ACHIEVEMENT_IS_NAMELESS_ERROR_MSG = "You cannot bestow an achievement that doesn't have a name"
 
 
 def member_not_in_server_error_msg(member_name: str) -> str:

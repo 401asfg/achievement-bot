@@ -1,5 +1,6 @@
 import os
 import unittest
+from pathlib import Path
 
 from src.model.achievement import Achievement
 from src.model.guild import Guild
@@ -9,8 +10,8 @@ from src.persistence.json_writer import JsonWriter
 
 
 class TestJsonWriter(unittest.TestCase):
-    TEST_DIR_DESTINATION = os.path.abspath(os.curdir) + "../../data/test/"
-    DESTINATION = TEST_DIR_DESTINATION + "json_writer_test_data.json"
+    TEST_DATA_DIR = (Path() / "../data/test/").absolute()
+    DESTINATION = TEST_DATA_DIR / "test_json_writer_data.json"
 
     ACHIEVEMENT_NAME_A = "Achievement A"
     BESTOWER_A = "Bestower A"
@@ -49,23 +50,28 @@ class TestJsonWriter(unittest.TestCase):
         self.assertEqual(self.DESTINATION, json_writer.destination)
 
     def test_write(self):
-        def assert_write(destination: str):
+        def assert_write(destination: Path, guild: Guild):
             json_writer = JsonWriter(destination)
-            json_writer.write(self.guild)
+            json_writer.write(guild)
 
             json_reader = JsonReader(destination)
             actual_guild = json_reader.read()
 
             actual_guild_json = actual_guild.to_json()
-            expected_guild_json = self.guild.to_json()
+            expected_guild_json = guild.to_json()
 
             self.assertEqual(expected_guild_json, actual_guild_json)
 
-        destination_non_existent = self.TEST_DIR_DESTINATION + "json_writer_test_data_non_existent.json"
-        assert_write(destination_non_existent)
+        # Write to non existent file
+        destination_non_existent = self.TEST_DATA_DIR / "test_json_writer_data_non_existent.json"
+        assert_write(destination_non_existent, self.guild)
         os.remove(destination_non_existent)
 
-        assert_write(self.DESTINATION)
+        # Write to existent file with incorrect starting data
+        assert_write(self.DESTINATION, self.guild)
+
+        # Reset writer JSON file to have incorrect starting data
+        assert_write(self.DESTINATION, Guild())
 
 
 if __name__ == '__main__':

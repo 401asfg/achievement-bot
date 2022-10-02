@@ -30,6 +30,17 @@ class TestAchievement(unittest.TestCase):
         assert_init(self.NAME_B, self.BESTOWER_B, self.achievement_b)
         assert_init(self.NAME_C, self.BESTOWER_C, self.achievement_c)
 
+        def assert_fail(name: str):
+            try:
+                Achievement(name, "Man")
+                self.fail()
+            except ValueError:
+                pass
+
+        assert_fail("")
+        assert_fail(" ")
+        assert_fail("      ")
+
     def test_to_json(self):
         def assert_to_json(achievement: Achievement, expected_json: dir):
             actual_achievement = achievement.to_json()

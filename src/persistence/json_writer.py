@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from src.model.guild import Guild
 
@@ -8,9 +9,9 @@ class JsonWriter:
     Writes JSON data to a JSON file
     """
 
-    _destination: str
+    _destination: Path
 
-    def __init__(self, destination):
+    def __init__(self, destination: Path):
         """
         Initializes the class
 
@@ -31,5 +32,5 @@ class JsonWriter:
             json.dump(guild_json, f)
 
     @property
-    def destination(self) -> str:
+    def destination(self) -> Path:
         return self._destination

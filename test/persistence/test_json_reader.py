@@ -1,30 +1,30 @@
-import os.path
 import unittest
+from pathlib import Path
 
 from src.model.achievement import Achievement
 from src.model.guild import Guild
-from src.model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
 from src.model.person import Person
 from src.persistence.json_reader import JsonReader
 
 
 class TestJsonReader(unittest.TestCase):
-    DESTINATION = os.path.abspath(os.curdir) + "../../data/test/json_reader_test_data.json"
+    TEST_DATA_DIR = (Path() / "../data/test").absolute()
+    DESTINATION_DIR = TEST_DATA_DIR / "test_json_reader_data.json"
 
     json_reader: JsonReader
 
     def setUp(self) -> None:
-        self.json_reader = JsonReader(self.DESTINATION)
+        self.json_reader = JsonReader(self.DESTINATION_DIR)
 
     def test_init(self):
-        self.assertEqual(self.DESTINATION, self.json_reader.destination)
+        self.assertEqual(self.DESTINATION_DIR, self.json_reader.destination)
 
     def test_read(self):
         try:
-            json_reader_fail = JsonReader("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+            json_reader_fail = JsonReader(self.DESTINATION_DIR / "test_json_reader_data_non_existent")
             json_reader_fail.read()
             self.fail()
-        except IOError:
+        except FileNotFoundError:
             pass
 
         achievement_name_a = "Achievement A"
