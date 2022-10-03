@@ -10,7 +10,7 @@ from src.persistence.json_writer import JsonWriter
 
 
 class TestJsonWriter(unittest.TestCase):
-    TEST_DATA_DIR = (Path() / "../data/test/").absolute()
+    TEST_DATA_DIR = (Path() / "data/test/").absolute()
     DESTINATION = TEST_DATA_DIR / "test_json_writer_data.json"
 
     ACHIEVEMENT_NAME_A = "Achievement A"

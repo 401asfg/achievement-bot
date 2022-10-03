@@ -10,7 +10,7 @@ from src.persistence.json_writer import JsonWriter
 
 
 class TestGuildSaveSystem(unittest.TestCase):
-    COPY_PATH = (Path() / "../data/test/guild_copy.json").absolute()
+    COPY_PATH = (Path() / "data/test/guild_copy.json").absolute()
 
     guild_save_system: GuildSaveSystem
 

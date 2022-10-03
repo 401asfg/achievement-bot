@@ -8,7 +8,7 @@ from src.persistence.json_reader import JsonReader
 
 
 class TestJsonReader(unittest.TestCase):
-    TEST_DATA_DIR = (Path() / "../data/test").absolute()
+    TEST_DATA_DIR = (Path() / "data/test").absolute()
     DESTINATION_DIR = TEST_DATA_DIR / "test_json_reader_data.json"
 
     json_reader: JsonReader
@@ -21,7 +21,7 @@ class TestJsonReader(unittest.TestCase):
 
     def test_read(self):
         try:
-            json_reader_fail = JsonReader(self.DESTINATION_DIR / "test_json_reader_data_non_existent")
+            json_reader_fail = JsonReader(self.TEST_DATA_DIR / "test_json_reader_data_non_existent")
             json_reader_fail.read()
             self.fail()
         except FileNotFoundError:
