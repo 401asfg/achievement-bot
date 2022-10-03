@@ -10,9 +10,12 @@ LIST_DESCRIPTION = "Lists all of the achievements that a user has"
 LIST_EXAMPLE = f"{COMMAND_PREFIX}{LIST_NAME} @TheMightyMeercat"
 LIST_HELP = f"{LIST_DESCRIPTION}\n{LIST_EXAMPLE}"
 
-ACHIEVEMENT_BESTOWER_INDICATOR = "    -"
+ACHIEVEMENT_INDICATOR = "  "
+ACHIEVEMENT_BESTOWER_INDICATOR = ACHIEVEMENT_INDICATOR + "    -"
 
 BLOCK_END = "```"
+
+# TODO: better text formatting (bold and italics)
 
 
 def bot_msg(msg: str) -> str:
@@ -38,7 +41,7 @@ def achievement_listing(achievement_name: str, bestower_name: str) -> str:
     :param bestower_name: The name of the user who bestowed the achievement
     :return: A listing of an achievement with the given achievement_name and the given bestower_name
     """
-    return f"\n{achievement_name}\n{ACHIEVEMENT_BESTOWER_INDICATOR}{bestower_name}"
+    return f"\n\n{ACHIEVEMENT_INDICATOR}{achievement_name}\n{ACHIEVEMENT_BESTOWER_INDICATOR}{bestower_name}"
 
 
 def member_achievement_list_msg(member_name: str, achievement_list_msg: str) -> str:
@@ -48,7 +51,7 @@ def member_achievement_list_msg(member_name: str, achievement_list_msg: str) -> 
     has
     :return: A message containing the given member_name and the given achievement_list_msg
     """
-    return f"{member_name} has achieved:\n{achievement_list_msg}"
+    return f"{member_name} has achieved:{achievement_list_msg}"
 
 
 def member_has_no_achievements_msg(member_name: str) -> str:
