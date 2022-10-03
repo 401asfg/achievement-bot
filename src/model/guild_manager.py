@@ -12,7 +12,7 @@ class GuildMember:
     """
     A member of a discord guild
     """
-    id: str
+    name: str
     display_name: str
 
 
@@ -34,15 +34,15 @@ class GuildManager:
         :raise ValueError: If the given member is not in the guild's given valid_members list
         """
 
-        valid_member_ids = [valid_member.id for valid_member in valid_members]
+        valid_member_ids = [valid_member.name for valid_member in valid_members]
 
-        if member.id not in valid_member_ids:
+        if member.name not in valid_member_ids:
             raise ValueError(member_not_in_server_error_msg(member.display_name))
 
-        if guild.contains(member.id):
-            return guild.get(member.id)
+        if guild.contains(member.name):
+            return guild.get(member.name)
 
-        person = Person(member.id)
+        person = Person(member.name)
         guild.add(person)
         return person
 
@@ -84,7 +84,7 @@ class GuildManager:
         achievement_name
         """
 
-        if member.id == achievement.bestower:
+        if member.name == achievement.bestower:
             raise ValueError(ADDED_ACHIEVEMENT_TO_SELF_ERROR_MSG)
 
         person = cls.query_guild(guild, member, valid_members)

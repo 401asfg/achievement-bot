@@ -22,7 +22,7 @@ def create_guild_member(member: discord.Member) -> GuildMember:
     :param member: The discord member to create a guild member of
     :return: A guild member created from the given discord member
     """
-    return GuildMember(member.id, member.display_name)
+    return GuildMember(member.name, member.display_name)
 
 
 def create_guild_members(members: List[discord.Member]) -> List[GuildMember]:
@@ -34,6 +34,7 @@ def create_guild_members(members: List[discord.Member]) -> List[GuildMember]:
 
 
 # TODO: test/move into model?
+# TODO: different message when achievements list is empty
 
 
 def create_achievement_list_msg(achievements: List[Achievement], guild_member: GuildMember) -> str:

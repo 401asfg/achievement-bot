@@ -12,7 +12,7 @@ LIST_DESCRIPTION = "Lists all of the achievements that a user has"
 LIST_EXAMPLE = f"{COMMAND_PREFIX}{LIST_NAME} @TheMightyMeercat"
 LIST_HELP = f"{LIST_DESCRIPTION}\n{LIST_EXAMPLE}"
 
-ACHIEVEMENT_BESTOWER_INDICATOR = "    - "
+ACHIEVEMENT_BESTOWER_INDICATOR = "    -"
 ACHIEVEMENT_BESTOWER_BULLET = "- "
 
 BLOCK_END = "```"
@@ -32,7 +32,7 @@ def member_received_achievement_msg(member_name: str, achievement_name: str) -> 
     :param achievement_name: The name of the achievement that was added to the given member
     :return: A message that states that the given member had the given achievement added to them
     """
-    return f"{member_name} has attained the {achievement_name} achievement!"
+    return f"{member_name} has attained the \"{achievement_name}\" achievement!"
 
 
 # TODO: test/move parts into model?
@@ -49,7 +49,7 @@ def member_achievement_list_msg(member_name: str, achievement_names: List[str], 
     :return: A message containing the given member_name, the achievement_names, and the bestower_names
     """
 
-    achievement_list_msg = f"{member_name} has attained:\n"
+    achievement_list_msg = f"{member_name} has achieved:\n"
 
     for i in range(len(achievement_names)):
         achievement_list_msg += "\n" + achievement_names[i] + "\n" + ACHIEVEMENT_BESTOWER_INDICATOR + bestower_names[i]

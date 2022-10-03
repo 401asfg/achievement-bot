@@ -57,7 +57,7 @@ class TestGuildManager(unittest.TestCase):
         self.assert_guild_members_state(list(expected_state.keys()))
 
         for expected_guild_member, expected_achievements in expected_state.items():
-            actual_person = self.guild.get(expected_guild_member.id)
+            actual_person = self.guild.get(expected_guild_member.name)
             actual_achievements = actual_person.get_achievements()
 
             self.assert_achievements(expected_achievements, actual_achievements)
@@ -71,7 +71,7 @@ class TestGuildManager(unittest.TestCase):
         try:
             achievement = Achievement(achievement_name, bestower)
             self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
-            actual_person = self.guild.get(member.id)
+            actual_person = self.guild.get(member.name)
             actual_achievement = actual_person.get(achievement_name)
             self.assertEqual(achievement_name, actual_achievement.name)
         except ValueError:
@@ -137,10 +137,10 @@ class TestGuildManager(unittest.TestCase):
                                                                                                    Achievement]]],
                                                                                          None]):
         # Member is Bestower
-        self.assert_add_achievement_value_error(member, valid_members, achievement_name, member.id, expected_state)
+        self.assert_add_achievement_value_error(member, valid_members, achievement_name, member.name, expected_state)
 
         # Member is not Bestower
-        member_is_not_bestower_assertion(member, valid_members, achievement_name, member.id + "x", expected_state)
+        member_is_not_bestower_assertion(member, valid_members, achievement_name, member.name + "x", expected_state)
 
     def assert_add_achievement_bestower_cases_external_value_error(self,
                                                                    member: GuildMember,
@@ -188,8 +188,8 @@ class TestGuildManager(unittest.TestCase):
 
         actual_achievement_names = []
 
-        if self.guild.contains(member.id):
-            actual_person = self.guild.get(member.id)
+        if self.guild.contains(member.name):
+            actual_person = self.guild.get(member.name)
             actual_achievements = actual_person.get_achievements()
             actual_achievement_names = [actual_achievement.name for actual_achievement in actual_achievements]
 
