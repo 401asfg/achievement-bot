@@ -2,7 +2,7 @@ from typing import List
 
 import discord
 
-from src.content.bot import member_achievement_list_msg, bot_msg
+from src.content.bot import member_achievement_list_msg, bot_msg, member_no_achievements_msg
 from src.model.achievement import Achievement
 from src.model.guild_manager import GuildMember
 
@@ -34,7 +34,6 @@ def create_guild_members(members: List[discord.Member]) -> List[GuildMember]:
 
 
 # TODO: test/move into model?
-# TODO: different message when achievements list is empty
 
 
 def create_achievement_list_msg(achievements: List[Achievement], guild_member: GuildMember) -> str:
@@ -43,6 +42,11 @@ def create_achievement_list_msg(achievements: List[Achievement], guild_member: G
     :param guild_member: The guild member, that has the given achievements, to include in the message
     :return: A message containing the given achievements and guild_member
     """
+    member_name = guild_member.display_name
+
+    if not achievements:
+        return member_no_achievements_msg(member_name)
+
     achievement_names = [achievement.name for achievement in achievements]
     bestower_names = [achievement.bestower for achievement in achievements]
-    return member_achievement_list_msg(guild_member.display_name, achievement_names, bestower_names)
+    return member_achievement_list_msg(member_name, achievement_names, bestower_names)

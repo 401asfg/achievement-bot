@@ -55,3 +55,11 @@ def member_achievement_list_msg(member_name: str, achievement_names: List[str], 
         achievement_list_msg += "\n" + achievement_names[i] + "\n" + ACHIEVEMENT_BESTOWER_INDICATOR + bestower_names[i]
 
     return achievement_list_msg
+
+
+def member_no_achievements_msg(member_name: str) -> str:
+    """
+    :param member_name: The name of the member
+    :return: A message stating that the member of the given member_name has no achievements
+    """
+    return f"{member_name} has no achievements"

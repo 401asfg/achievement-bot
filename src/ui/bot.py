@@ -13,8 +13,6 @@ from src.model.inventory.exceptions.inventory_contains_item_error import Invento
 from src.persistence.guild_save_system import GuildSaveSystem
 from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg, send_msg
 
-# TODO: command error handling
-
 
 guild_manager = GuildManager()
 guild_save_system = GuildSaveSystem()
