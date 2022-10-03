@@ -1,5 +1,3 @@
-from typing import List
-
 COMMAND_PREFIX = ";"
 
 ACHIEVE_NAME = "achieve"
@@ -13,7 +11,6 @@ LIST_EXAMPLE = f"{COMMAND_PREFIX}{LIST_NAME} @TheMightyMeercat"
 LIST_HELP = f"{LIST_DESCRIPTION}\n{LIST_EXAMPLE}"
 
 ACHIEVEMENT_BESTOWER_INDICATOR = "    -"
-ACHIEVEMENT_BESTOWER_BULLET = "- "
 
 BLOCK_END = "```"
 
@@ -35,29 +32,26 @@ def member_received_achievement_msg(member_name: str, achievement_name: str) -> 
     return f"{member_name} has attained the \"{achievement_name}\" achievement!"
 
 
-# TODO: test/move parts into model?
-
-
-def member_achievement_list_msg(member_name: str, achievement_names: List[str], bestower_names: List[str]) -> str:
+def achievement_listing(achievement_name: str, bestower_name: str) -> str:
     """
-    Produces a message that contains the given member_name, the given achievement_names, and the given bestower_names;
-    The achievement_names list and the bestower_names list should have equal lengths
+    :param achievement_name: The name of the achievement that the listing is of
+    :param bestower_name: The name of the user who bestowed the achievement
+    :return: A listing of an achievement with the given achievement_name and the given bestower_name
+    """
+    return f"\n{achievement_name}\n{ACHIEVEMENT_BESTOWER_INDICATOR}{bestower_name}"
 
+
+def member_achievement_list_msg(member_name: str, achievement_list_msg: str) -> str:
+    """
     :param member_name: The name of the member
-    :param achievement_names: The names of the member's achievements
-    :param bestower_names: The names of the bestowers of each of the member's achievements
-    :return: A message containing the given member_name, the achievement_names, and the bestower_names
+    :param achievement_list_msg: The a message containing the list of achievements the member of the given member_name
+    has
+    :return: A message containing the given member_name and the given achievement_list_msg
     """
-
-    achievement_list_msg = f"{member_name} has achieved:\n"
-
-    for i in range(len(achievement_names)):
-        achievement_list_msg += "\n" + achievement_names[i] + "\n" + ACHIEVEMENT_BESTOWER_INDICATOR + bestower_names[i]
-
-    return achievement_list_msg
+    return f"{member_name} has achieved:\n{achievement_list_msg}"
 
 
-def member_no_achievements_msg(member_name: str) -> str:
+def member_has_no_achievements_msg(member_name: str) -> str:
     """
     :param member_name: The name of the member
     :return: A message stating that the member of the given member_name has no achievements
