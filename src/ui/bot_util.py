@@ -42,6 +42,7 @@ def create_achievement_list_msg(achievements: List[Achievement], guild_member: G
     :param guild_member: The guild member, that has the given achievements, to include in the message
     :return: A message containing the given achievements and guild_member
     """
+
     member_name = guild_member.display_name
 
     if not achievements:

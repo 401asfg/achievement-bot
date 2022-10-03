@@ -2,9 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 
-# TODO: test all persistence classes and the new functionality of the classes that inherit from them
-
-
 class Writable(ABC):
     """
     Can be converted to a JSON like object
