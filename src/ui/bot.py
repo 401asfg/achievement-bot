@@ -34,7 +34,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-# TODO: pull contents of command functions into model section so these functions have minimal code in them
+# TODO: pull contents of command functions into model section so these functions have minimal code in them?
 
 
 @bot.command(name=ACHIEVE_NAME, help=ACHIEVE_HELP, brief=ACHIEVE_DESCRIPTION)

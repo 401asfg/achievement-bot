@@ -16,4 +16,4 @@ def member_already_has_achievement_error_msg(member_name: str, achievement_name:
     :param achievement_name: The name of the achievement that the member already has
     :return: An error message for when a member already has an achievement
     """
-    return f"{member_name} already has the {achievement_name} achievement"
+    return f"{member_name} already has the \"{achievement_name}\" achievement"
