@@ -8,7 +8,7 @@ from src.persistence.json_reader import JsonReader
 
 
 class TestJsonReader(unittest.TestCase):
-    TEST_DATA_DIR = (Path() / "data/test").absolute()
+    TEST_DATA_DIR = (Path() / "../data/test").absolute()
     DESTINATION_DIR = TEST_DATA_DIR / "test_json_reader_data.json"
 
     json_reader: JsonReader

@@ -2,7 +2,7 @@ import os
 
 
 def main():
-    os.system('python3 src/ui/bot.py')
+    os.system('python src/ui/bot.py')
 
 
 if __name__ == "__main__":
