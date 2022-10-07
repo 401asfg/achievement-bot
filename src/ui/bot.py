@@ -22,6 +22,7 @@ load_dotenv()
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 TOKEN = os.getenv('TOKEN')
 bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
