@@ -1,8 +1,8 @@
-import os
+from src.ui.bot import bot, TOKEN
 
 
 def main():
-    os.system('python src/ui/bot.py')
+    bot.run(TOKEN)
     input("Bot has finished execution; press Enter to exit")
 
 

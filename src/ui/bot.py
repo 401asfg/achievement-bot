@@ -20,9 +20,10 @@ guild = guild_save_system.load()
 
 load_dotenv()
 
+# TODO: does the member_content intent need to be enabled?
+
 intents = discord.Intents.default()
 intents.members = True
-intents.message_content = True
 
 TOKEN = os.getenv('TOKEN')
 bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
@@ -66,6 +67,3 @@ async def list_command(ctx, member: discord.Member):
         guild_save_system.save(guild)
     except ValueError as e:
         await send_msg(ctx, str(e))
-
-
-bot.run(TOKEN)
