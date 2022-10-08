@@ -32,6 +32,9 @@ class GuildSaveSystem:
         """
         self._json_writer.write(guild)
 
+    # TODO: generate file if it doesn't exist
+    # TODO: test file generation (file itself, data dir)
+
     def load(self) -> Guild:
         """
         Loads a guild from a JSON file located at JSON_Store

@@ -14,19 +14,24 @@ from src.persistence.guild_save_system import GuildSaveSystem
 from src.ui.bot_util import create_guild_member, create_guild_members, create_achievement_list_msg, send_msg
 
 
-guild_manager = GuildManager()
-guild_save_system = GuildSaveSystem()
-guild = guild_save_system.load()
+_guild_manager = GuildManager()
+_guild_save_system = GuildSaveSystem()
+_guild = _guild_save_system.load()
 
 load_dotenv()
 
 # TODO: does the member_content intent need to be enabled?
 
-intents = discord.Intents.default()
-intents.members = True
+_intents = discord.Intents.default()
+_intents.members = True
 
 TOKEN = os.getenv('TOKEN')
-bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
+bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=_intents)
+
+
+@bot.event
+async def on_ready():
+    print("Bot is ready!")
 
 
 @bot.event
@@ -46,9 +51,9 @@ async def achieve_command(ctx, member: discord.Member, *achievement_name_segment
 
     try:
         achievement = Achievement(achievement_name, ctx.message.author.name)
-        guild_manager.add_achievement(guild, guild_member, valid_guild_members, achievement)
+        _guild_manager.add_achievement(_guild, guild_member, valid_guild_members, achievement)
         await send_msg(ctx, member_received_achievement_msg(guild_member.display_name, achievement_name))
-        guild_save_system.save(guild)
+        _guild_save_system.save(_guild)
     except ValueError as e:
         await send_msg(ctx, str(e))
     except InventoryContainsItemError:
@@ -61,9 +66,9 @@ async def list_command(ctx, member: discord.Member):
     valid_guild_members = create_guild_members(ctx.guild.members)
 
     try:
-        achievements = guild_manager.get_achievements(guild, guild_member, valid_guild_members)
+        achievements = _guild_manager.get_achievements(_guild, guild_member, valid_guild_members)
         achievement_list_msg = create_achievement_list_msg(achievements, guild_member)
         await send_msg(ctx, achievement_list_msg)
-        guild_save_system.save(guild)
+        _guild_save_system.save(_guild)
     except ValueError as e:
         await send_msg(ctx, str(e))

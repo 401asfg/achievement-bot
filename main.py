@@ -1,9 +1,10 @@
-from src.ui.bot import bot, TOKEN
-
 
 def main():
-    bot.run(TOKEN)
-    input("Bot has finished execution; press Enter to exit")
+    print("Initializing...")
+    from src.ui.bot import bot, TOKEN
+    print("Bot is starting up...")
+    bot.run(TOKEN)                                              # TODO: should this be moved back to bot?
+    input("Bot has ended its execution; press Enter to exit")
 
 
 if __name__ == "__main__":
