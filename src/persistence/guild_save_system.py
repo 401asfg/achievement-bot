@@ -32,14 +32,14 @@ class GuildSaveSystem:
         """
         self._json_writer.write(guild)
 
-    # TODO: generate file if it doesn't exist
-    # TODO: test file generation (file itself, data dir)
-
     def load(self) -> Guild:
         """
-        Loads a guild from a JSON file located at JSON_Store
+        Loads a guild from a JSON file located at JSON_Store; if there is no file at JSON_STORE, produces an empty guild
 
-        :raise FileNotFoundError: If there is no file at JSON_STORE
-        :return: The guild that was loaded
+        :return: The guild that was loaded; will be a new, empty guild if the file at JSON_STORE can't be found
         """
+
+        if not self.JSON_STORE.exists():
+            return Guild()
+
         return self._json_reader.read()

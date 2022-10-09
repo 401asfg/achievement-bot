@@ -75,11 +75,9 @@ class TestGuildSaveSystem(unittest.TestCase):
         shutil.move(self.COPY_PATH, self.guild_save_system.JSON_STORE)
 
     def test_load(self):
-        try:
-            self.guild_save_system.load()
-            self.fail()
-        except FileNotFoundError:
-            pass
+        empty_guild = Guild()
+        actual_guild = self.guild_save_system.load()
+        self.assertEqual(empty_guild.to_json(), actual_guild.to_json())
 
         json_writer = JsonWriter(self.guild_save_system.JSON_STORE)
         json_writer.write(self.guild)

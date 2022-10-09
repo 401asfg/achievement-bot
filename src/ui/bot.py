@@ -24,7 +24,7 @@ load_dotenv()
 
 # TODO: does the member_content intent need to be enabled?
 # TODO: format output of help command for specific commands
-# TODO: save unique member id to json and get nickname for outputs
+# TODO: save unique member id to json and get nickname for outputs (will need to modify person)
 # TODO: percent of users with achievement (case sensitive)
 # TODO: kill command
 
@@ -46,13 +46,10 @@ async def on_message(message):
 
 
 @bot.event
-async def on_command_error(ctx, error):
+async def on_command_error(error):
     if isinstance(error, CommandNotFound):
         return
     raise error
-
-
-# TODO: pull contents of command functions into model section so these functions have minimal code in them?
 
 
 @bot.command(name=ACHIEVE_NAME, help=ACHIEVE_HELP, brief=ACHIEVE_DESCRIPTION)
