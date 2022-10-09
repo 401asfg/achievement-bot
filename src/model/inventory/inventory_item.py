@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.persistence.writable import Writable
+from src.persistence.writable.writable import Writable
 
 
 class InventoryItem(Writable):

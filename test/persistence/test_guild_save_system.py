@@ -1,5 +1,6 @@
 import unittest
 import shutil
+from datetime import date
 from pathlib import Path
 
 from src.model.achievement import Achievement
@@ -27,15 +28,19 @@ class TestGuildSaveSystem(unittest.TestCase):
 
     achievement_a: Achievement
     ACHIEVEMENT_A_NAME = "Achievement A"
+    DATE_ACHIEVED_A = date(1000, 1, 1)
 
     achievement_b: Achievement
     ACHIEVEMENT_B_NAME = "Achievement B"
+    DATE_ACHIEVED_B = date(2000, 2, 2)
 
     achievement_c: Achievement
     ACHIEVEMENT_C_NAME = "Achievement C"
+    DATE_ACHIEVED_C = date(3000, 3, 3)
 
     achievement_d: Achievement
     ACHIEVEMENT_D_NAME = "Achievement D"
+    DATE_ACHIEVED_D = date(4000, 4, 4)
 
     def setUp(self) -> None:
         self.guild_save_system = GuildSaveSystem()
@@ -46,10 +51,10 @@ class TestGuildSaveSystem(unittest.TestCase):
         self.person_b = Person(self.PERSON_B_NAME)
         self.person_c = Person(self.PERSON_C_NAME)
 
-        self.achievement_a = Achievement(self.ACHIEVEMENT_A_NAME, self.PERSON_C_NAME)
-        self.achievement_b = Achievement(self.ACHIEVEMENT_B_NAME, self.PERSON_A_NAME)
-        self.achievement_c = Achievement(self.ACHIEVEMENT_C_NAME, self.PERSON_B_NAME)
-        self.achievement_d = Achievement(self.ACHIEVEMENT_D_NAME, self.PERSON_A_NAME)
+        self.achievement_a = Achievement(self.ACHIEVEMENT_A_NAME, self.PERSON_C_NAME, self.DATE_ACHIEVED_A)
+        self.achievement_b = Achievement(self.ACHIEVEMENT_B_NAME, self.PERSON_A_NAME, self.DATE_ACHIEVED_B)
+        self.achievement_c = Achievement(self.ACHIEVEMENT_C_NAME, self.PERSON_B_NAME, self.DATE_ACHIEVED_C)
+        self.achievement_d = Achievement(self.ACHIEVEMENT_D_NAME, self.PERSON_A_NAME, self.DATE_ACHIEVED_D)
 
         self.person_a.add(self.achievement_a)
         self.person_a.add(self.achievement_c)
@@ -100,8 +105,8 @@ class TestGuildSaveSystem(unittest.TestCase):
         # Partial Guild
         person_to_overwrite_a = Person("Person To Overwrite A")
         person_to_overwrite_b = Person("Person To Overwrite B")
-        achievement_to_overwrite_a = Achievement("Achievement To Overwrite A", "Other Person")
-        achievement_to_overwrite_b = Achievement("Achievement To Overwrite B", "Other Person")
+        achievement_to_overwrite_a = Achievement("Achievement To Overwrite A", "Other Person", date(2222, 12, 12))
+        achievement_to_overwrite_b = Achievement("Achievement To Overwrite B", "Other Person", date(3333, 11, 11))
 
         person_to_overwrite_a.add(achievement_to_overwrite_a)
         person_to_overwrite_a.add(achievement_to_overwrite_b)

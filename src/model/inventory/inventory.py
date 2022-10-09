@@ -3,7 +3,7 @@ from typing import Dict, TypeVar, Generic, Optional, List
 from src.model.inventory.exceptions.inventory_contains_item_error import InventoryContainsItemError
 from src.model.inventory.exceptions.inventory_item_not_found_error import InventoryItemNotFoundError
 from src.model.inventory.inventory_item import InventoryItem
-from src.persistence.writable_collection import WritableCollection
+from src.persistence.writable.writable_collection import WritableCollection
 
 T = TypeVar("T", bound=InventoryItem)
 

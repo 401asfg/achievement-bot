@@ -1,5 +1,6 @@
 import os
 import unittest
+from datetime import date
 from pathlib import Path
 
 from src.model.achievement import Achievement
@@ -15,9 +16,11 @@ class TestJsonWriter(unittest.TestCase):
 
     ACHIEVEMENT_NAME_A = "Achievement A"
     BESTOWER_A = "Bestower A"
+    DATE_ACHIEVED_A = date(1000, 1, 2)
 
     ACHIEVEMENT_NAME_B = "Achievement B"
     BESTOWER_B = "Bestower B"
+    DATE_ACHIEVED_B = date(2000, 3, 4)
 
     PERSON_NAME_A = "Person A"
     PERSON_NAME_B = "Person B"
@@ -31,8 +34,8 @@ class TestJsonWriter(unittest.TestCase):
     guild: Guild
 
     def setUp(self) -> None:
-        self.achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, self.BESTOWER_A)
-        self.achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, self.BESTOWER_B)
+        self.achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, self.BESTOWER_A, self.DATE_ACHIEVED_A)
+        self.achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, self.BESTOWER_B, self.DATE_ACHIEVED_B)
 
         self.person_a = Person(self.PERSON_NAME_A)
         self.person_a.add(self.achievement_a)

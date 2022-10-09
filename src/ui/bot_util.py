@@ -51,6 +51,8 @@ def create_achievement_list_msg(achievements: List[Achievement], guild_member: G
     achievement_list_msg = ""
 
     for achievement in achievements:
-        achievement_list_msg += achievement_listing(achievement.name, achievement.bestower)
+        achievement_list_msg += achievement_listing(achievement.name,
+                                                    achievement.bestower,
+                                                    str(achievement.date_achieved))
 
     return member_achievement_list_msg(member_name, achievement_list_msg)

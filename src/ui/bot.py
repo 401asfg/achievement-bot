@@ -1,7 +1,9 @@
 import os
+from datetime import date
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import CommandNotFound
 from dotenv import load_dotenv
 
 from src.content.bot import COMMAND_PREFIX, ACHIEVE_NAME, ACHIEVE_HELP, ACHIEVE_DESCRIPTION, LIST_NAME, LIST_HELP, \
@@ -21,6 +23,10 @@ _guild = _guild_save_system.load()
 load_dotenv()
 
 # TODO: does the member_content intent need to be enabled?
+# TODO: format output of help command for specific commands
+# TODO: save unique member id to json and get nickname for outputs
+# TODO: percent of users with achievement (case sensitive)
+# TODO: kill command
 
 _intents = discord.Intents.default()
 _intents.members = True
@@ -39,6 +45,13 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        return
+    raise error
+
+
 # TODO: pull contents of command functions into model section so these functions have minimal code in them?
 
 
@@ -50,7 +63,7 @@ async def achieve_command(ctx, member: discord.Member, *achievement_name_segment
     achievement_name = " ".join(achievement_name_segments)
 
     try:
-        achievement = Achievement(achievement_name, ctx.message.author.name)
+        achievement = Achievement(achievement_name, ctx.message.author.name, date.today())
         _guild_manager.add_achievement(_guild, guild_member, valid_guild_members, achievement)
         await send_msg(ctx, member_received_achievement_msg(guild_member.display_name, achievement_name))
         _guild_save_system.save(_guild)

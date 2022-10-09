@@ -34,9 +34,9 @@ class GuildManager:
         :raise ValueError: If the given member is not in the guild's given valid_members list
         """
 
-        valid_member_ids = [valid_member.name for valid_member in valid_members]
+        valid_member_names = [valid_member.name for valid_member in valid_members]
 
-        if member.name not in valid_member_ids:
+        if member.name not in valid_member_names:
             raise ValueError(member_not_in_server_error_msg(member.display_name))
 
         if guild.contains(member.name):

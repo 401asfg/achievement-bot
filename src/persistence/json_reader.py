@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 from typing import List
 
@@ -124,4 +125,5 @@ class JsonReader:
 
         name: str = json_object[Achievement.NAME_JSON_KEY]
         bestower: str = json_object[Achievement.BESTOWER_JSON_KEY]
-        return Achievement(name, bestower)
+        date_achieved: date = json_object[Achievement.DATE_ACHIEVED_JSON_KEY]
+        return Achievement(name, bestower, date_achieved)

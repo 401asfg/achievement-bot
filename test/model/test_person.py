@@ -1,4 +1,5 @@
 import unittest
+from datetime import date
 from typing import List
 
 from src.model.achievement import Achievement
@@ -22,6 +23,11 @@ class TestPerson(unittest.TestCase):
     BESTOWER_C = "Bestower C"
     BESTOWER_D = "Bestower D"
 
+    DATE_ACHIEVED_A = date(1000, 1, 1)
+    DATE_ACHIEVED_B = date(2000, 2, 2)
+    DATE_ACHIEVED_C = date(3000, 3, 3)
+    DATE_ACHIEVED_D = date(4000, 4, 4)
+
     achievement_a: Achievement
     achievement_b: Achievement
     achievement_c: Achievement
@@ -30,10 +36,10 @@ class TestPerson(unittest.TestCase):
     def setUp(self) -> None:
         self.person = Person(self.PERSON_NAME)
 
-        self.achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, self.BESTOWER_A)
-        self.achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, self.BESTOWER_B)
-        self.achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, self.BESTOWER_C)
-        self.achievement_d = Achievement(self.ACHIEVEMENT_NAME_D, self.BESTOWER_D)
+        self.achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, self.BESTOWER_A, self.DATE_ACHIEVED_A)
+        self.achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, self.BESTOWER_B, self.DATE_ACHIEVED_B)
+        self.achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, self.BESTOWER_C, self.DATE_ACHIEVED_C)
+        self.achievement_d = Achievement(self.ACHIEVEMENT_NAME_D, self.BESTOWER_D, self.DATE_ACHIEVED_D)
 
     def test_init(self):
         self.assertEqual(self.PERSON_NAME, self.person.name)
@@ -181,15 +187,18 @@ class TestPerson(unittest.TestCase):
                            Person.ITEMS_JSON_KEY: [
                                {
                                    Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_A,
-                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_A
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_A,
+                                   Achievement.DATE_ACHIEVED_JSON_KEY: str(self.DATE_ACHIEVED_A)
                                },
                                {
                                    Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_B,
-                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_B
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_B,
+                                   Achievement.DATE_ACHIEVED_JSON_KEY: str(self.DATE_ACHIEVED_B)
                                },
                                {
                                    Achievement.NAME_JSON_KEY: self.ACHIEVEMENT_NAME_D,
-                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_D
+                                   Achievement.BESTOWER_JSON_KEY: self.BESTOWER_D,
+                                   Achievement.DATE_ACHIEVED_JSON_KEY: str(self.DATE_ACHIEVED_D)
                                }
                            ]
                        })

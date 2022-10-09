@@ -35,13 +35,15 @@ def member_received_achievement_msg(member_name: str, achievement_name: str) -> 
     return f"{member_name} has attained the \"{achievement_name}\" achievement!"
 
 
-def achievement_listing(achievement_name: str, bestower_name: str) -> str:
+def achievement_listing(achievement_name: str, bestower_name: str, date_achieved: str) -> str:
     """
     :param achievement_name: The name of the achievement that the listing is of
     :param bestower_name: The name of the user who bestowed the achievement
+    :param date_achieved: The date that the achievement was achieved
     :return: A listing of an achievement with the given achievement_name and the given bestower_name
     """
-    return f"\n\n{ACHIEVEMENT_INDICATOR}{achievement_name}\n{ACHIEVEMENT_BESTOWER_INDICATOR}{bestower_name}"
+    return f"\n\n{ACHIEVEMENT_INDICATOR}{achievement_name}\n{ACHIEVEMENT_BESTOWER_INDICATOR}{bestower_name} " \
+           f"({date_achieved}) "
 
 
 def member_achievement_list_msg(member_name: str, achievement_list_msg: str) -> str:

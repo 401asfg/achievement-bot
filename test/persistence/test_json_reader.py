@@ -1,4 +1,5 @@
 import unittest
+from datetime import date
 from pathlib import Path
 
 from src.model.achievement import Achievement
@@ -29,11 +30,13 @@ class TestJsonReader(unittest.TestCase):
 
         achievement_name_a = "Achievement A"
         achievement_bestower_a = "Bestower A"
-        expected_achievement_a = Achievement(achievement_name_a, achievement_bestower_a)
+        achievement_date_achieved_a = date(1000, 2, 1)
+        expected_achievement_a = Achievement(achievement_name_a, achievement_bestower_a, achievement_date_achieved_a)
 
         achievement_name_b = "Achievement B"
         achievement_bestower_b = "Bestower B"
-        expected_achievement_b = Achievement(achievement_name_b, achievement_bestower_b)
+        achievement_date_achieved_b = date(2000, 4, 3)
+        expected_achievement_b = Achievement(achievement_name_b, achievement_bestower_b, achievement_date_achieved_b)
 
         person_name_a = "Person A"
         expected_person_a = Person(person_name_a)

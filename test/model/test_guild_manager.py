@@ -1,5 +1,6 @@
 import copy
 import unittest
+from datetime import date
 from typing import List, Dict, Callable
 
 from src.model.achievement import Achievement
@@ -69,7 +70,7 @@ class TestGuildManager(unittest.TestCase):
                                     bestower: str,
                                     expected_state_pre_pass: Dict[GuildMember, List[Achievement]]):
         try:
-            achievement = Achievement(achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower, date.today())
             self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             actual_person = self.guild.get(member.name)
             actual_achievement = actual_person.get(achievement_name)
@@ -80,7 +81,7 @@ class TestGuildManager(unittest.TestCase):
             self.fail()
 
         expected_state = expected_state_pre_pass
-        added_achievement = Achievement(achievement_name, "")
+        added_achievement = Achievement(achievement_name, "", date.today())
 
         if member in expected_state.keys():
             expected_state[member].append(added_achievement)
@@ -96,7 +97,7 @@ class TestGuildManager(unittest.TestCase):
                                            bestower: str,
                                            expected_state: Dict[GuildMember, List[Achievement]]):
         try:
-            achievement = Achievement(achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower, date.today())
             self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             self.fail()
         except ValueError:
@@ -113,7 +114,7 @@ class TestGuildManager(unittest.TestCase):
                                                bestower: str,
                                                expected_state: Dict[GuildMember, List[Achievement]]):
         try:
-            achievement = Achievement(achievement_name, bestower)
+            achievement = Achievement(achievement_name, bestower, date.today())
             self.guild_manager.add_achievement(self.guild, member, valid_members, achievement)
             self.fail()
         except ValueError:
@@ -212,7 +213,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_a,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
@@ -228,7 +229,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_a,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
@@ -240,17 +241,17 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -268,17 +269,17 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -290,7 +291,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
@@ -299,17 +300,17 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_B, "")]
+        expected_state_pre_pass[self.member_b] = [Achievement(self.ACHIEVEMENT_NAME_B, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_C, ""))
+        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_C, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
@@ -318,12 +319,12 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_a] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_A, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_A, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_a,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -339,7 +340,7 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_C, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
@@ -348,17 +349,17 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_B, ""))
+        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_B, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_C,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_C, ""))
+        expected_state_pre_pass[self.member_b].append(Achievement(self.ACHIEVEMENT_NAME_C, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_b,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
@@ -370,12 +371,12 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_a].append(Achievement(self.ACHIEVEMENT_NAME_A, ""))
+        expected_state_pre_pass[self.member_a].append(Achievement(self.ACHIEVEMENT_NAME_A, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_A, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_A, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_a,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -387,12 +388,12 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -410,12 +411,12 @@ class TestGuildManager(unittest.TestCase):
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "")]
+        expected_state_pre_pass[self.member_c] = [Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())]
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_B,
                                                 expected_state_pre_pass)
 
-        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, ""))
+        expected_state_pre_pass[self.member_c].append(Achievement(self.ACHIEVEMENT_NAME_B, "", date.today()))
         self.assert_add_achievement_input_cases(self.member_c,
                                                 self.ACHIEVEMENT_NAME_A,
                                                 expected_state_pre_pass)
@@ -477,14 +478,14 @@ class TestGuildManager(unittest.TestCase):
         assert_valid_members_cases(self.member_a, guild_members_pre_pass, [])
 
         guild_members_pre_pass.append(self.member_a)
-        achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, "")
+        achievement_a = Achievement(self.ACHIEVEMENT_NAME_A, "", date.today())
         self.guild_manager.add_achievement(self.guild, self.member_a, [self.member_a], achievement_a)
 
         assert_valid_members_cases(self.member_a, guild_members_pre_pass, [achievement_a])
         assert_valid_members_cases(self.member_b, guild_members_pre_pass, [])
 
         guild_members_pre_pass.append(self.member_b)
-        achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, "")
+        achievement_b = Achievement(self.ACHIEVEMENT_NAME_B, "", date.today())
         self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_b)
         self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_a)
 
@@ -494,7 +495,7 @@ class TestGuildManager(unittest.TestCase):
         assert_valid_members_cases(self.member_c, guild_members_pre_pass, [])
 
         guild_members_pre_pass.append(self.member_c)
-        achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, "")
+        achievement_c = Achievement(self.ACHIEVEMENT_NAME_C, "", date.today())
         self.guild_manager.add_achievement(self.guild, self.member_a, [self.member_a], achievement_c)
         self.guild_manager.add_achievement(self.guild, self.member_c, [self.member_c], achievement_a)
         self.guild_manager.add_achievement(self.guild, self.member_b, [self.member_b], achievement_c)

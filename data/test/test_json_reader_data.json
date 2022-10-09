@@ -5,7 +5,8 @@
       "items": [
         {
           "name": "Achievement A",
-          "bestower": "Bestower A"
+          "bestower": "Bestower A",
+          "date achieved": "1000-02-01"
         }
       ]
     },
@@ -14,11 +15,13 @@
       "items": [
         {
           "name": "Achievement B",
-          "bestower": "Bestower B"
+          "bestower": "Bestower B",
+          "date achieved": "2000-04-03"
         },
         {
           "name": "Achievement A",
-          "bestower": "Bestower A"
+          "bestower": "Bestower A",
+          "date achieved": "1000-02-01"
         }
       ]
     }
